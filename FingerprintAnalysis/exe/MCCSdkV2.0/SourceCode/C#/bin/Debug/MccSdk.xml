@@ -1,0 +1,448 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>MccSdk</name>
+    </assembly>
+    <members>
+        <member name="T:BioLab.Biometrics.Mcc.Sdk.MccSdk">
+            <summary>
+            A static class that provides methods to use MCC features. 
+            </summary>
+        </member>
+        <member name="M:BioLab.Biometrics.Mcc.Sdk.MccSdk.SetMccEnrollParameters(System.String)">
+            <summary>
+            Sets the MCC Enroll parameters from the specified XML file.
+            </summary>
+            <param name="filePath">A string that contains the full path of the XML file from which to load the MCC Enroll parameters.</param>
+        </member>
+        <member name="M:BioLab.Biometrics.Mcc.Sdk.MccSdk.SetMccMatchParameters(System.String)">
+            <summary>
+            Sets the MCC Match parameters from the specified XML file.
+            </summary>
+            <param name="filePath">A string that contains the full path of the XML file from which to load the MCC Match parameters.</param>
+        </member>
+        <member name="M:BioLab.Biometrics.Mcc.Sdk.MccSdk.CreateMccTemplate(System.Int32,System.Int32,System.Int32,BioLab.Biometrics.Mcc.Sdk.Minutia[])">
+            <summary>
+            Creates a MCC Template object.
+            </summary>
+            <param name="imageWidth">The width, in pixels, of the fingerprint image.</param>
+            <param name="imageHeight">The height, in pixels, of the fingerprint image.</param>
+            <param name="imageResolution">The resolution, in dpi, of the fingerprint image.</param>
+            <param name="minutiae">The array of minutiae from which to create the MCC Template.</param>
+            <returns>The MCC Template this method creates.</returns>
+        </member>
+        <member name="M:BioLab.Biometrics.Mcc.Sdk.MccSdk.CreateMccTemplateFromTextTemplate(System.String)">
+            <summary>
+            Creates a MCC Template object from a minutiae template stored in text format.
+            </summary>
+            <param name="filePath">A string that contains the full path of the text file from which to create the MCC Template.</param>
+            <returns>The MCC Template this method creates.</returns>
+        </member>
+        <member name="M:BioLab.Biometrics.Mcc.Sdk.MccSdk.CreateMccTemplateFromIsoTemplate(System.String)">
+            <summary>
+            Creates a MCC Template object from a minutiae template stored using the standard minutiae-based template format [ISO/IEC 19794-2 (2011)].
+            </summary>
+            <param name="filePath">A string that contains the full path of the ISO file from which to create the MCC Template.</param>
+            <returns>The MCC Template this method creates.</returns>
+        </member>
+        <member name="M:BioLab.Biometrics.Mcc.Sdk.MccSdk.MatchMccTemplates(System.Object,System.Object)">
+            <summary>
+            Compares two MCC Templates.
+            </summary>
+            <param name="template1">The first MCC Template.</param>
+            <param name="template2">The second MCC Template.</param>
+            <returns>The similarity score [0;1] of the two MCC Templates. If no global score method has been selected, the similarity score is 0.</returns>
+        </member>
+        <member name="M:BioLab.Biometrics.Mcc.Sdk.MccSdk.MatchMccTemplates(System.Object,System.Object,System.Double[0:,0:]@,System.Double[0:,0:]@,System.Double[0:,0:]@,System.Double[0:,0:]@,System.Int32[]@,System.Int32[]@,System.Int32[]@,System.Int32[]@)">
+            <summary>
+            Compares two MCC Templates returning detailed results.
+            </summary>
+            <param name="template1">The first MCC Template.</param>
+            <param name="template2">The second MCC Template.</param>
+            <param name="localSimilarities">Returns the matrix containing the local similarity of each minutia pair.</param>
+            <param name="normalizedLocalSimilarities">Returns the matrix containing the normalized local similarity of each minutia pair. If the local similarity matrix normalization parameter is false, this output parameter is null.</param>
+            <param name="relaxedLocalSimilarities">Returns the matrix containing the relaxed local similarity of each minutia pair. If no global score method has been selected or the method selected does not use relaxation, this output parameter is null.</param>
+            <param name="efficiencies">Returns the matrix containing the efficiencies of each minutiae pair. If no global score method has been selected or the method selected does not use relaxation, this output parameter is null.</param>
+            <param name="preSelectedMinutiaeTemplate1">Returns the array containing the indices of the minutiae of the first template preselected for the relaxation. If no global score method has been selected or the method selected does not use relaxation, this output parameter is null.</param>
+            <param name="preSelectedMinutiaeTemplate2">Returns the array containing the indices of the minutiae of the second template preselected for the relaxation. If no global score method has been selected or the method selected does not use relaxation, this output parameter is null.</param>
+            <param name="selectedMinutiaeTemplate1">Returns the array containing the indices of the minutiae of the first template selected during the calculation on the global score. If no global score method has been selected, this output parameter is null.</param>
+            <param name="selectedMinutiaeTemplate2">Returns the array containing the indices of the minutiae of the second template selected during the calculation on the global score. If no global score method has been selected, this output parameter is null.</param>
+            <returns>The similarity score [0;1] of the two MCC Templates. If no global score method has been selected, the similarity score is 0.</returns>
+        </member>
+        <member name="M:BioLab.Biometrics.Mcc.Sdk.MccSdk.MatchMccTemplates(System.Object,System.Object,System.Double[0:,0:])">
+            <summary>
+            Compares two MCC Templates using local similarities calculated externally.
+            </summary>
+            <param name="template1">The first MCC Template.</param>
+            <param name="template2">The second MCC Template.</param>
+            <param name="localSimilarities">The matrix containing the local similarity of each minutia pair calculated externally.</param>
+            <returns>The similarity score [0;1] of the two MCC Templates. If no global score method has been selected, the similarity score is 0.</returns>
+        </member>
+        <member name="M:BioLab.Biometrics.Mcc.Sdk.MccSdk.MatchMccTemplates(System.Object,System.Object,System.Double[0:,0:],System.Double[0:,0:]@,System.Double[0:,0:]@,System.Double[0:,0:]@,System.Int32[]@,System.Int32[]@,System.Int32[]@,System.Int32[]@)">
+            <summary>
+            Compares two MCC Templates using local similarities calculated externally and returning detailed results.
+            </summary>
+            <param name="template1">The first MCC Template.</param>
+            <param name="template2">The second MCC Template.</param>
+            <param name="localSimilarities">The matrix containing the local similarity of each minutia pair calculated externally.</param>
+            <param name="normalizedLocalSimilarities">Returns the matrix containing the normalized local similarity of each minutia pair. If the local similarity matrix normalization parameter is false, this output parameter is null.</param>
+            <param name="relaxedLocalSimilarities">Returns the matrix containing the relaxed local similarity of each minutia pair. If no global score method has been selected or the method selected does not use relaxation, this output parameter is null.</param>
+            <param name="efficiencies">Returns the matrix containing the efficiencies of each minutiae pair. If no global score method has been selected or the method selected does not use relaxation, this output parameter is null.</param>
+            <param name="preSelectedMinutiaeTemplate1">Returns the array containing the indices of the minutiae of the first template preselected for the relaxation. If no global score method has been selected or the method selected does not use relaxation, this output parameter is null.</param>
+            <param name="preSelectedMinutiaeTemplate2">Returns the array containing the indices of the minutiae of the second template preselected for the relaxation. If no global score method has been selected or the method selected does not use relaxation, this output parameter is null.</param>
+            <param name="selectedMinutiaeTemplate1">Returns the array containing the indices of the minutiae of the first template selected during the calculation on the global score. If no global score method has been selected, this output parameter is null.</param>
+            <param name="selectedMinutiaeTemplate2">Returns the array containing the indices of the minutiae of the second template selected during the calculation on the global score. If no global score method has been selected, this output parameter is null.</param>
+            <returns>The similarity score [0;1] of the two MCC Templates. If no global score method has been selected, the similarity score is 0.</returns>
+        </member>
+        <member name="M:BioLab.Biometrics.Mcc.Sdk.MccSdk.SaveMccTemplateToTextFile(System.Object,System.String)">
+            <summary>
+            Saves a MCC Template in text format to a specified file.
+            </summary>
+            <param name="template">The MCC Template to save.</param>
+            <param name="filePath">A string that contains the full path of the file to which to save the MCC Template.</param>
+        </member>
+        <member name="M:BioLab.Biometrics.Mcc.Sdk.MccSdk.LoadMccTemplateFromTextFile(System.String)">
+            <summary>
+            Loads a MCC Template from a text file.
+            </summary>
+            <param name="filePath">A string that contains the full path of the text file from which to load the MCC Template.</param>
+            <returns>The MCC Template this method loads.</returns>
+        </member>
+        <member name="M:BioLab.Biometrics.Mcc.Sdk.MccSdk.SaveMccTemplateToBinaryFile(System.Object,System.String)">
+            <summary>
+            Saves a MCC Template in binary format to a specified file.
+            </summary>
+            <param name="template">The MCC Template to save.</param>
+            <param name="filePath">A string that contains the full path of the file to which to save the MCC Template.</param>
+        </member>
+        <member name="M:BioLab.Biometrics.Mcc.Sdk.MccSdk.LoadMccTemplateFromBinaryFile(System.String)">
+            <summary>
+            Loads a MCC Template from a binary file.
+            </summary>
+            <param name="filePath">A string that contains the full path of the binary file from which to load the MCC Template.</param>
+            <returns>The MCC Template this method loads.</returns>
+        </member>
+        <member name="M:BioLab.Biometrics.Mcc.Sdk.MccSdk.CreateMccIndex(System.Int32,System.Int32,System.Int32,System.Int32,System.Double,System.Int32,System.Double,System.Int32,System.Int32)">
+            <summary>
+            Creates a new MCC Index.
+            </summary>
+            <param name="ns">The number of cells along the cylinder diameter.</param>
+            <param name="nd">The number of cylinder sections.</param>
+            <param name="h">The number of bits selected by each hash function.</param>
+            <param name="l">The number of hash functions.</param>
+            <param name="p">The distance function shape parameter.</param>
+            <param name="minPC">The minimum number of one-bits for a bucket index to be used.</param>
+            <param name="deltaTheta">The maximum global minutiae template rotation (radians).</param>
+            <param name="deltaXY">The maximum global minutiae template translation (pixels).</param>
+            <param name="randomSeed">The random seed used to calculate the starting value for the pseudo-random hash functions generation.</param>
+        </member>
+        <member name="M:BioLab.Biometrics.Mcc.Sdk.MccSdk.DeleteMccIndex">
+            <summary>
+            Deletes the current MCC Index.
+            </summary>
+        </member>
+        <member name="M:BioLab.Biometrics.Mcc.Sdk.MccSdk.AddTemplateToMccIndex(System.Int32,System.Int32,System.Int32,BioLab.Biometrics.Mcc.Sdk.Minutia[],System.Int64)">
+            <summary>
+            Adds a new item to the current MCC Index. 
+            </summary>
+            <param name="imageWidth">The width, in pixels, of the fingerprint image.</param>
+            <param name="imageHeight">The height, in pixels, of the fingerprint image.</param>
+            <param name="imageResolution">The resolution, in dpi, of the fingerprint image.</param>
+            <param name="minutiae">The array of minutiae to be added.</param>
+            <param name="id">The unique identifier (ID) of the item to be added.</param>
+        </member>
+        <member name="M:BioLab.Biometrics.Mcc.Sdk.MccSdk.AddTextTemplateToMccIndex(System.String,System.Int64)">
+            <summary>
+            Adds a new minutiae template stored in text format to the current MCC Index.
+            </summary>
+            <param name="filePath">A string that contains the full path of the text file containing the new minutiae template to be added.</param>
+            <param name="id">The unique identifier (ID) of the minutiae template to be added.</param>
+        </member>
+        <member name="M:BioLab.Biometrics.Mcc.Sdk.MccSdk.AddIsoTemplateToMccIndex(System.String,System.Int64)">
+            <summary>
+            Adds a new minutiae template minutiae template stored using the standard minutiae-based template format [ISO/IEC 19794-2 (2011)] to the current MCC Index.
+            </summary>
+            <param name="filePath">A string that contains the full path of the ISO file containing the new minutiae template to be added.</param>
+            <param name="id">The unique identifier (ID) of the minutiae template to be added.</param>
+        </member>
+        <member name="M:BioLab.Biometrics.Mcc.Sdk.MccSdk.SearchTemplateIntoMccIndex(System.Int32,System.Int32,System.Int32,BioLab.Biometrics.Mcc.Sdk.Minutia[],System.Boolean,System.Single[]@)">
+            <summary>
+            Searches an item into the current MCC Index.
+            </summary>
+            <param name="imageWidth">The width, in pixels, of the fingerprint image to be searched.</param>
+            <param name="imageHeight">The height, in pixels, of the fingerprint image to be searched.</param>
+            <param name="imageResolution">The resolution, in dpi, of the fingerprint image to be searched.</param>
+            <param name="minutiae">The array of minutiae of the fingerprint image to be searched.</param>
+            <param name="useReductionCriterion">If true the candidate list could be reduced according to the similarity values.</param>
+            <param name="sortedScores">The sorted scores corresponding to the candidate list returned.</param>
+            <returns>The candidate list containing the IDs sorted by scores.</returns>
+        </member>
+        <member name="M:BioLab.Biometrics.Mcc.Sdk.MccSdk.SearchTextTemplateIntoMccIndex(System.String,System.Boolean,System.Single[]@)">
+            <summary>
+            Searches a minutiae template stored in text format into the current MCC Index.
+            </summary>
+            <param name="filePath">A string that contains the full path of the text file containing the minutiae template to be searched.</param>
+            <param name="useReductionCriterion">If true the candidate list could be reduced according to the similarity values.</param>
+            <param name="sortedScores">The sorted scores corresponding to the candidate list returned.</param>
+            <returns>The candidate list containing the IDs sorted by scores.</returns>
+        </member>
+        <member name="M:BioLab.Biometrics.Mcc.Sdk.MccSdk.SearchIsoTemplateIntoMccIndex(System.String,System.Boolean,System.Single[]@)">
+            <summary>
+            Searches a minutiae template, stored using the standard minutiae-based template format [ISO/IEC 19794-2 (2011)], into the current MCC Index.
+            </summary>
+            <param name="filePath">A string that contains the full path of the ISO file containing the new minutiae template to be searched.</param>
+            <param name="useReductionCriterion">If true the candidate list could be reduced according to the similarity values.</param>
+            <param name="sortedScores">The sorted scores corresponding to the candidate list returned.</param>
+            <returns>The candidate list containing the IDs sorted by scores.</returns>
+        </member>
+        <member name="M:BioLab.Biometrics.Mcc.Sdk.MccSdk.SaveMccIndexToFile(System.String)">
+            <summary>
+            Saves the current MCC Index in binary format to a specified file.
+            </summary>
+            <param name="filePath">A string that contains the full path of the file to which to save the MCC Index.</param>
+        </member>
+        <member name="M:BioLab.Biometrics.Mcc.Sdk.MccSdk.LoadMccIndexFromFile(System.String)">
+            <summary>
+            Loads a MCC Index from a binary file.
+            </summary>
+            <param name="filePath">A string that contains the full path of the file from which to load the MCC Index.</param>
+        </member>
+        <member name="M:BioLab.Biometrics.Mcc.Sdk.MccSdk.SetPMccEnrollParameters(System.String,System.String)">
+            <summary>
+            Sets the P-MCC Enroll parameters from the specified XML file.
+            </summary>
+            <param name="filePath">A string that contains the full path of the XML file from which to load the P-MCC Enroll parameters.</param>
+            <param name="klTransformFilePath">A string that contains the full path of the text file from which to load the KL transform used to create P-MCC templates.</param>
+        </member>
+        <member name="M:BioLab.Biometrics.Mcc.Sdk.MccSdk.SetPMccMatchParameters(System.String)">
+            <summary>
+            Sets the P-MCC Match parameters from the specified XML file.
+            </summary>
+            <param name="filePath">A string that contains the full path of the XML file from which to load the P-MCC Match parameters.</param>
+        </member>
+        <member name="M:BioLab.Biometrics.Mcc.Sdk.MccSdk.CreatePMccTemplate(System.Int32,System.Int32,System.Int32,BioLab.Biometrics.Mcc.Sdk.Minutia[])">
+            <summary>
+            Creates a P-MCC Template object.
+            </summary>
+            <param name="imageWidth">The width, in pixels, of the fingerprint image.</param>
+            <param name="imageHeight">The height, in pixels, of the fingerprint image.</param>
+            <param name="imageResolution">The resolution, in dpi, of the fingerprint image.</param>
+            <param name="minutiae">The array of minutiae from which to create the P-MCC Template.</param>
+            <returns>The P-MCC Template this method creates.</returns>
+        </member>
+        <member name="M:BioLab.Biometrics.Mcc.Sdk.MccSdk.CreatePMccTemplateFromTextTemplate(System.String)">
+            <summary>
+            Creates a P-MCC Template object from a minutiae template stored in text format.
+            </summary>
+            <param name="filePath">A string that contains the full path of the text file from which to create the P-MCC Template.</param>
+            <returns>The P-MCC Template this method creates.</returns>
+        </member>
+        <member name="M:BioLab.Biometrics.Mcc.Sdk.MccSdk.CreatePMccTemplateFromIsoTemplate(System.String)">
+            <summary>
+            Creates a P-MCC Template object from a minutiae template stored using the standard minutiae-based template format [ISO/IEC 19794-2 (2011)].
+            </summary>
+            <param name="filePath">A string that contains the full path of the ISO file from which to create the P-MCC Template.</param>
+            <returns>The P-MCC Template this method creates.</returns>
+        </member>
+        <member name="M:BioLab.Biometrics.Mcc.Sdk.MccSdk.MatchPMccTemplates(System.Object,System.Object)">
+            <summary>
+            Compares two P-MCC Templates.
+            </summary>
+            <param name="template1">The first protected P-MCC Template.</param>
+            <param name="template2">The second protected P-MCC Template.</param>
+            <returns>The similarity score [0;1] of the two P-MCC Templates. If no global score method has been selected, the similarity score is 0.</returns>
+        </member>
+        <member name="M:BioLab.Biometrics.Mcc.Sdk.MccSdk.MatchPMccTemplates(System.Object,System.Object,System.Double[0:,0:]@,System.Double[0:,0:]@,System.Int32[]@,System.Int32[]@)">
+            <summary>
+            Compares two P-MCC Templates returning detailed results.
+            </summary>
+            <param name="template1">The first protected P-MCC Template.</param>
+            <param name="template2">The second protected P-MCC Template.</param>
+            <param name="localSimilarities">Returns the matrix containing the local similarity of each minutia pair.</param>
+            <param name="normalizedLocalSimilarities">Returns the matrix containing the normalized local similarity of each minutia pair. If the local similarity matrix normalization parameter is false, this output parameter is null.</param>
+            <param name="selectedMinutiaeTemplate1">Returns the array containing the indices of the minutiae of the first template selected during the calculation on the global score. If no global score method has been selected, this output parameter is null.</param>
+            <param name="selectedMinutiaeTemplate2">Returns the array containing the indices of the minutiae of the second template selected during the calculation on the global score. If no global score method has been selected, this output parameter is null.</param>
+            <returns>The similarity score [0;1] of the two P-MCC Templates. If no global score method has been selected, the similarity score is 0.</returns>
+        </member>
+        <member name="M:BioLab.Biometrics.Mcc.Sdk.MccSdk.MatchPMccTemplates(System.Object,System.Object,System.Double[0:,0:])">
+            <summary>
+            Compares two P-MCC Templates using local similarities calculated externally.
+            </summary>
+            <param name="template1">The first protected P-MCC Template.</param>
+            <param name="template2">The second protected P-MCC Template.</param>
+            <param name="localSimilarities">The matrix containing the local similarity of each minutia pair calculated externally.</param>
+            <returns>The similarity score [0;1] of the two P-MCC Templates. If no global score method has been selected, the similarity score is 0.</returns>
+        </member>
+        <member name="M:BioLab.Biometrics.Mcc.Sdk.MccSdk.MatchPMccTemplates(System.Object,System.Object,System.Double[0:,0:],System.Double[0:,0:]@,System.Int32[]@,System.Int32[]@)">
+            <summary>
+            Compares two P-MCC Templates using local similarities calculated externally and returning detailed results.
+            </summary>
+            <param name="template1">The first protected P-MCC Template.</param>
+            <param name="template2">The second protected P-MCC Template.</param>
+            <param name="localSimilarities">The matrix containing the local similarity of each minutia pair calculated externally.</param>
+            <param name="normalizedLocalSimilarities">Returns the matrix containing the normalized local similarity of each minutia pair. If the local similarity matrix normalization parameter is false, this output parameter is null.</param>
+            <param name="selectedMinutiaeTemplate1">Returns the array containing the indices of the minutiae of the first template selected during the calculation on the global score. If no global score method has been selected, this output parameter is null.</param>
+            <param name="selectedMinutiaeTemplate2">Returns the array containing the indices of the minutiae of the second template selected during the calculation on the global score. If no global score method has been selected, this output parameter is null.</param>
+            <returns>The similarity score [0;1] of the two P-MCC Templates. If no global score method has been selected, the similarity score is 0.</returns>
+        </member>
+        <member name="M:BioLab.Biometrics.Mcc.Sdk.MccSdk.SavePMccTemplateToTextFile(System.Object,System.String)">
+            <summary>
+            Saves a P-MCC Template in text format to a specified file.
+            </summary>
+            <param name="template">The P-MCC Template to save.</param>
+            <param name="filePath">A string that contains the full path of the file to which to save the P-MCC Template.</param>
+        </member>
+        <member name="M:BioLab.Biometrics.Mcc.Sdk.MccSdk.LoadPMccTemplateFromTextFile(System.String)">
+            <summary>
+            Loads a P-MCC Template from a text file.
+            </summary>
+            <param name="filePath">A string that contains the full path of the text file from which to load the P-MCC Template.</param>
+            <returns>The P-MCC Template this method loads.</returns>
+        </member>
+        <member name="M:BioLab.Biometrics.Mcc.Sdk.MccSdk.SavePMccTemplateToBinaryFile(System.Object,System.String)">
+            <summary>
+            Saves a P-MCC Template in binary format to a specified file.
+            </summary>
+            <param name="template">The P-MCC Template to save.</param>
+            <param name="filePath">A string that contains the full path of the file to which to save the P-MCC Template.</param>
+        </member>
+        <member name="M:BioLab.Biometrics.Mcc.Sdk.MccSdk.LoadPMccTemplateFromBinaryFile(System.String)">
+            <summary>
+            Loads a P-MCC Template from a binary file.
+            </summary>
+            <param name="filePath">A string that contains the full path of the binary file from which to load the P-MCC Template.</param>
+            <returns>The P-MCC Template this method loads.</returns>
+        </member>
+        <member name="M:BioLab.Biometrics.Mcc.Sdk.MccSdk.Set2PMccEnrollParameters(System.String,System.String,System.Int32,System.Boolean)">
+            <summary>
+            Sets the 2P-MCC Enroll parameters from the specified XML file.
+            </summary>
+            <param name="filePath">A string that contains the full path of the XML file from which to load the 2P-MCC Enroll parameters.</param>
+            <param name="klTransformFilePath">A string that contains the full path of the text file from which to load the KL transform used to create 2P-MCC templates.</param>
+            <param name="c">The parameter c of the 2P-MCC method.</param>
+            <param name="randomShuffleBitVector">If true the encrypted bit-vectors are randomly shuffled.</param>
+        </member>
+        <member name="M:BioLab.Biometrics.Mcc.Sdk.MccSdk.Set2PMccMatchParameters(System.String)">
+            <summary>
+            Sets the 2P-MCC Match parameters from the specified XML file.
+            </summary>
+            <param name="filePath">A string that contains the full path of the XML file from which to load the 2P-MCC Match parameters.</param>
+        </member>
+        <member name="M:BioLab.Biometrics.Mcc.Sdk.MccSdk.Create2PMccTemplate(System.Int32,System.Int32,System.Int32,BioLab.Biometrics.Mcc.Sdk.Minutia[],System.Int32)">
+            <summary>
+            Creates a 2P-MCC Template object using a user-specific secret key.
+            </summary>
+            <param name="imageWidth">The width, in pixels, of the fingerprint image.</param>
+            <param name="imageHeight">The height, in pixels, of the fingerprint image.</param>
+            <param name="imageResolution">The resolution, in dpi, of the fingerprint image.</param>
+            <param name="minutiae">The array of minutiae from which to create the 2P-MCC Template.</param>
+            <param name="s">The user-specific secret key.</param>
+            <returns>The 2P-MCC Template this method creates.</returns>
+        </member>
+        <member name="M:BioLab.Biometrics.Mcc.Sdk.MccSdk.Create2PMccTemplateFromTextTemplate(System.String,System.Int32)">
+            <summary>
+            Creates a 2P-MCC Template object from a minutiae template stored in text format using a user-specific secret key.
+            </summary>
+            <param name="filePath">A string that contains the full path of the text file from which to create the 2P-MCC Template.</param>
+            <param name="s">The user-specific secret key.</param> 
+            <returns>The 2P-MCC Template this method creates.</returns>
+        </member>
+        <member name="M:BioLab.Biometrics.Mcc.Sdk.MccSdk.Create2PMccTemplateFromIsoTemplate(System.String,System.Int32)">
+            <summary>
+            Creates a 2P-MCC Template object from a minutiae template stored using the standard minutiae-based template format [ISO/IEC 19794-2 (2011)].
+            </summary>
+            <param name="filePath">A string that contains the full path of the ISO file from which to create the 2P-MCC Template.</param>
+            <param name="s">The user-specific secret key.</param> 
+            <returns>The 2P-MCC Template this method creates.</returns>
+        </member>
+        <member name="M:BioLab.Biometrics.Mcc.Sdk.MccSdk.Match2PMccTemplates(System.Object,System.Object)">
+            <summary>
+            Compares two 2P-MCC Templates.
+            </summary>
+            <param name="template1">The first protected 2P-MCC Template.</param>
+            <param name="template2">The second protected 2P-MCC Template.</param>
+            <returns>The similarity score [0;1] of the two 2P-MCC Templates. If no global score method has been selected, the similarity score is 0.</returns>
+        </member>
+        <member name="M:BioLab.Biometrics.Mcc.Sdk.MccSdk.Match2PMccTemplates(System.Object,System.Object,System.Double[0:,0:]@,System.Double[0:,0:]@,System.Int32[]@,System.Int32[]@)">
+            <summary>
+            Compares two 2P-MCC Templates returning detailed results.
+            </summary>
+            <param name="template1">The first protected 2P-MCC Template.</param>
+            <param name="template2">The second protected 2P-MCC Template.</param>
+            <param name="localSimilarities">Returns the matrix containing the local similarity of each minutia pair.</param>
+            <param name="normalizedLocalSimilarities">Returns the matrix containing the normalized local similarity of each minutia pair. If the local similarity matrix normalization parameter is false, this output parameter is null.</param>
+            <param name="selectedMinutiaeTemplate1">Returns the array containing the indices of the minutiae of the first template selected during the calculation on the global score. If no global score method has been selected, this output parameter is null.</param>
+            <param name="selectedMinutiaeTemplate2">Returns the array containing the indices of the minutiae of the second template selected during the calculation on the global score. If no global score method has been selected, this output parameter is null.</param>
+            <returns>The similarity score [0;1] of the two 2P-MCC Templates. If no global score method has been selected, the similarity score is 0.</returns>
+        </member>
+        <member name="M:BioLab.Biometrics.Mcc.Sdk.MccSdk.Match2PMccTemplates(System.Object,System.Object,System.Double[0:,0:])">
+            <summary>
+            Compares two 2P-MCC Templates using local similarities calculated externally.
+            </summary>
+            <param name="template1">The first protected 2P-MCC Template.</param>
+            <param name="template2">The second protected 2P-MCC Template.</param>
+            <param name="localSimilarities">The matrix containing the local similarity of each minutia pair calculated externally.</param>
+            <returns>The similarity score [0;1] of the two 2P-MCC Templates. If no global score method has been selected, the similarity score is 0.</returns>
+        </member>
+        <member name="M:BioLab.Biometrics.Mcc.Sdk.MccSdk.Match2PMccTemplates(System.Object,System.Object,System.Double[0:,0:],System.Double[0:,0:]@,System.Int32[]@,System.Int32[]@)">
+            <summary>
+            Compares two 2P-MCC Templates using local similarities calculated externally and returning detailed results.
+            </summary>
+            <param name="template1">The first protected 2P-MCC Template.</param>
+            <param name="template2">The second protected 2P-MCC Template.</param>
+            <param name="localSimilarities">The matrix containing the local similarity of each minutia pair calculated externally.</param>
+            <param name="normalizedLocalSimilarities">Returns the matrix containing the normalized local similarity of each minutia pair. If the local similarity matrix normalization parameter is false, this output parameter is null.</param>
+            <param name="selectedMinutiaeTemplate1">Returns the array containing the indices of the minutiae of the first template selected during the calculation on the global score. If no global score method has been selected, this output parameter is null.</param>
+            <param name="selectedMinutiaeTemplate2">Returns the array containing the indices of the minutiae of the second template selected during the calculation on the global score. If no global score method has been selected, this output parameter is null.</param>
+            <returns>The similarity score [0;1] of the two 2P-MCC Templates. If no global score method has been selected, the similarity score is 0.</returns>
+        </member>
+        <member name="M:BioLab.Biometrics.Mcc.Sdk.MccSdk.Save2PMccTemplateToTextFile(System.Object,System.String)">
+            <summary>
+            Saves a 2P-MCC Template in text format to a specified file.
+            </summary>
+            <param name="template">The 2P-MCC Template to save.</param>
+            <param name="filePath">A string that contains the full path of the file to which to save the 2P-MCC Template.</param>
+        </member>
+        <member name="M:BioLab.Biometrics.Mcc.Sdk.MccSdk.Load2PMccTemplateFromTextFile(System.String)">
+            <summary>
+            Loads a 2P-MCC Template from a text file.
+            </summary>
+            <param name="filePath">A string that contains the full path of the text file from which to load the 2P-MCC Template.</param>
+            <returns>The 2P-MCC Template this method loads.</returns>
+        </member>
+        <member name="M:BioLab.Biometrics.Mcc.Sdk.MccSdk.Save2PMccTemplateToBinaryFile(System.Object,System.String)">
+            <summary>
+            Saves a 2P-MCC Template in binary format to a specified file.
+            </summary>
+            <param name="template">The 2P-MCC Template to save.</param>
+            <param name="filePath">A string that contains the full path of the file to which to save the 2P-MCC Template.</param>
+        </member>
+        <member name="M:BioLab.Biometrics.Mcc.Sdk.MccSdk.Load2PMccTemplateFromBinaryFile(System.String)">
+            <summary>
+            Loads a 2P-MCC Template from a binary file.
+            </summary>
+            <param name="filePath">A string that contains the full path of the binary file from which to load the 2P-MCC Template.</param>
+            <returns>The 2P-MCC Template this method loads.</returns>
+        </member>
+        <member name="T:BioLab.Biometrics.Mcc.Sdk.Minutia">
+            <summary>
+            Represents a minutia
+            </summary>
+        </member>
+        <member name="P:BioLab.Biometrics.Mcc.Sdk.Minutia.X">
+            <summary>
+            The x coordinate of the minutia location (in pixel)
+            </summary>
+        </member>
+        <member name="P:BioLab.Biometrics.Mcc.Sdk.Minutia.Y">
+            <summary>
+            The y coordinate of the minutia location (in pixel)
+            </summary>
+        </member>
+        <member name="P:BioLab.Biometrics.Mcc.Sdk.Minutia.Direction">
+            <summary>
+            Minutiae angle (in radians)
+            </summary>
+        </member>
+    </members>
+</doc>
