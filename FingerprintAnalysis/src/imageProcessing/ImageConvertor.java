@@ -9,7 +9,7 @@ public abstract class ImageConvertor {
 	 protected BufferedImage image = null;
 	 protected int width;
 	 protected int height;
-
+	 
 	 public abstract BufferedImage convertToGrayscale() throws Exception;
 	 public abstract BufferedImage convertToBinary(int threshold) throws Exception;
 

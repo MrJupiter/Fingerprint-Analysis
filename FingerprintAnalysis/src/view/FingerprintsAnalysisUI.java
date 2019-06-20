@@ -16,6 +16,7 @@ import panels.FingerprintAuthenticationPanel;
 import panels.ImageProcessingPanel;
 import panels.MinutiaeExtractionPanel;
 import utilies.StringNumeric;
+import utilies.Thin;
 
 import javax.imageio.ImageIO;
 import javax.swing.JFileChooser;
@@ -249,7 +250,13 @@ public class FingerprintsAnalysisUI {
 	
 		imageProcessingPanel.getThinButton().addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				
+				try {
+					Thin thin = new Thin(imageProcessingPanel.getPathTextFieldText(), Integer.parseInt(imageProcessingPanel.getThresholdSpinner().getValue().toString()));
+					imageProcessingPanel.setBufferedConvertedImage(thin.thinImage());
+					imageProcessingPanel.getConvertedImagePanel().setCurrentImage(imageProcessingPanel.getBufferedConvertedImage());
+				} catch (Exception e2) {
+					e2.printStackTrace();
+				}
 			}
 		});
         
