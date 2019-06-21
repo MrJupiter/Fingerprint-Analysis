@@ -26,6 +26,7 @@ public class MinutiaeExtractionPanel extends JPanel{
 	private JButton convertToTemplateButton;
 	private JButton saveMinutaeTemplateButton;
 	private JLabel title;
+	private JButton jColorChooser;
 	
 	public MinutiaeExtractionPanel() {
 		setLayout(null);
@@ -70,7 +71,7 @@ public class MinutiaeExtractionPanel extends JPanel{
 		
 		convertToTemplateButton = new JButton("To Template");
 		convertToTemplateButton.setFont(new Font("Times New Roman", Font.BOLD, 13));
-		convertToTemplateButton.setBounds(427, 227, 135, 35);
+		convertToTemplateButton.setBounds(427, 247, 135, 25);
 		panel_2.add(convertToTemplateButton);
 		
 		JLabel label_1 = new JLabel("Minutiae Template");
@@ -100,6 +101,10 @@ public class MinutiaeExtractionPanel extends JPanel{
 		sampleScrollPane.setBounds(12, 13, 380, 396);
 		panel_3.add(sampleScrollPane);
 
+		jColorChooser = new JButton("Minutiae color");
+		jColorChooser.setBounds(427, 215, 135, 25);
+		panel_2.add(jColorChooser);
+		
 		saveMinutaeTemplateButton = new JButton("Save");
 		saveMinutaeTemplateButton.setFont(new Font("Times New Roman", Font.BOLD, 13));
 		saveMinutaeTemplateButton.setBounds(427, 457, 135, 25);
@@ -132,6 +137,10 @@ public class MinutiaeExtractionPanel extends JPanel{
 
 	public JLabel getTitle() {
 		return title;
+	}
+	
+	public JButton getjColorChooser() {
+		return jColorChooser;
 	}
 	
 }

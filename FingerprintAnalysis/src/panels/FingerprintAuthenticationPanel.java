@@ -27,6 +27,7 @@ public class FingerprintAuthenticationPanel extends JPanel{
 	private ScoreResultBean scoreLabel;
 	private JPanel authorisationColorPanel;
 	private JTextField thresholdValueTextField;
+	private JButton jColorChooser;
 	
 	public FingerprintAuthenticationPanel() {
 		setLayout(null);
@@ -89,6 +90,10 @@ public class FingerprintAuthenticationPanel extends JPanel{
 		label.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, 15));
 		label.setBounds(148, 31, 105, 16);
 		panel_2.add(label);
+		
+		jColorChooser = new JButton("Minutiae color");
+		jColorChooser.setBounds(427, 130, 135, 25);
+		panel_2.add(jColorChooser);
 		
 		JLabel lblThreshold = new JLabel("Threshold:");
 		lblThreshold.setBounds(462, 160, 72, 18);
@@ -186,6 +191,10 @@ public class FingerprintAuthenticationPanel extends JPanel{
 	
 	public JTextField getThresholdValueTextField() {
 		return thresholdValueTextField;
+	}
+	
+	public JButton getjColorChooser() {
+		return jColorChooser;
 	}
 }
 

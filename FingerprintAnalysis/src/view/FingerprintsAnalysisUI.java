@@ -20,6 +20,7 @@ import utilies.Terminal;
 import utilies.Thin;
 
 import javax.imageio.ImageIO;
+import javax.swing.JColorChooser;
 import javax.swing.JFileChooser;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -307,19 +308,38 @@ public class FingerprintsAnalysisUI {
 		minutiaeExtractionPanel.getSaveMinutaeTemplateButton().addActionListener(new ActionListener() {
 			@Override
             public void actionPerformed(ActionEvent e) {
-				JFileChooser repository = new JFileChooser();
-	            repository.setApproveButtonText("Save");
-	            try {
-	               repository.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
-	               repository.showOpenDialog(frame);
-	               repository.setBounds(600, 400, 600, 420);
-	               FileWriter fw = new FileWriter(repository.getSelectedFile().getAbsolutePath());
-	               fw.write(minutiaeExtractionPanel.getTemplateTextBean().getText());
-	               fw.close();
-	            }catch (Exception ex){
-	                System.out.println("Error Message: " + ex.getMessage());
-	            }
+				if(!minutiaeExtractionPanel.getTemplateTextBean().getText().equals("")) {
+					JFileChooser repository = new JFileChooser();
+		            repository.setApproveButtonText("Save");
+		            try {
+		               repository.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+		               repository.showOpenDialog(frame);
+		               repository.setBounds(600, 400, 600, 420);
+		               FileWriter fw = new FileWriter(repository.getSelectedFile().getAbsolutePath());
+		               fw.write(minutiaeExtractionPanel.getTemplateTextBean().getText());
+		               fw.close();
+		            }catch (Exception ex){
+		                System.out.println("Error Message: " + ex.getMessage());
+		            }
+				}
             }
+		});
+		
+		minutiaeExtractionPanel.getjColorChooser().addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+        		if(!minutiaeExtractionPanel.getPathTextField().getText().equals("")) {
+					Color initialcolor=Color.RED;    
+					Color color=JColorChooser.showDialog(minutiaeExtractionPanel,"Select a color",initialcolor);   
+					minutiaeExtractionPanel.getOriginalImagePanel().setCircleColor(color);
+					try {
+                    		TemplateTextBean image2template = new TemplateTextBean();
+                    		image2template.convertToTemplate(minutiaeExtractionPanel.getPathTextField().getText(), "rubbish", minutiaeExtractionPanel.getOriginalImagePanel());
+    						TemplateTextBean.clearRubbish("rubbish");
+					} catch (Exception e2) {
+						e2.printStackTrace();
+					}
+				}
+			}
 		});
 		
         // Fingerprint Authentication Panel Listeners
@@ -430,7 +450,32 @@ public class FingerprintsAnalysisUI {
                 }
             }
 		});
-	
+		
+		fingerprintAuthenticationPanel.getjColorChooser().addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String thresholdString = fingerprintAuthenticationPanel.getThresholdValueTextField().getText();
+        		if(StringNumeric.isNumeric(thresholdString) && !thresholdString.equals("") && !fingerprintAuthenticationPanel.getPathTextField1().getText().equals("") && !fingerprintAuthenticationPanel.getPathTextField2().getText().equals("")) {
+					Color initialcolor=Color.RED;    
+					Color color=JColorChooser.showDialog(fingerprintAuthenticationPanel,"Select a color",initialcolor);   
+					fingerprintAuthenticationPanel.getOriginalImagePanel1().setCircleColor(color);
+					fingerprintAuthenticationPanel.getOriginalImagePanel2().setCircleColor(color);
+					try {
+                    		TemplateTextBean image2template = new TemplateTextBean();
+                    		image2template.convertToTemplate(fingerprintAuthenticationPanel.getPathTextField1().getText(), "rubbish1", fingerprintAuthenticationPanel.getOriginalImagePanel1());
+                    		image2template.convertToTemplate(fingerprintAuthenticationPanel.getPathTextField2().getText(), "rubbish2", fingerprintAuthenticationPanel.getOriginalImagePanel2());
+    						String score = fingerprintAuthenticationPanel.getScoreLabel().getScoreResult("./rubbish1.txt", "./rubbish2.txt");
+    						float threshold = Float.parseFloat(thresholdString);
+    						fingerprintAuthenticationPanel.getAuthorisationColorPanel().setBackground((Double.parseDouble(score)>threshold)?new Color(0,255,0):new Color(255,0,0));
+    						fingerprintAuthenticationPanel.getScoreLabel().setForeground((Double.parseDouble(score)>threshold)?new Color(0,0,0):new Color(255,255,255));
+    						TemplateTextBean.clearRubbish("rubbish1");
+    						TemplateTextBean.clearRubbish("rubbish2");
+					} catch (Exception e2) {
+						e2.printStackTrace();
+					}
+				}
+			}
+		});
+		
 		Terminal.executeCommand("rm *xyt *txt *brw *dm *hcm *lcm *lfm *min *qm *png *jpeg *jpg *gif");
 	}
 }

@@ -14,7 +14,8 @@ public class ImageBean extends JPanel implements Serializable {
 	private static final long serialVersionUID = 1L;	
 	private String _imageAbsolutePathString;
     private Image _currentImage = null;
-
+    private Color circleColor;
+    
 	public ImageBean() {
 		super();
 	}
@@ -47,8 +48,11 @@ public class ImageBean extends JPanel implements Serializable {
 	}
 	
 	public void drawMinutiae(Graphics g, int x, int y) throws Exception{
-		g.setColor(new Color(0, 255, 255));
+		g.setColor(circleColor);
         g.drawOval(x, y, 7, 7);
 	}
 	
+	public void setCircleColor(Color circleColor) {
+		this.circleColor = circleColor;
+	}
 }
