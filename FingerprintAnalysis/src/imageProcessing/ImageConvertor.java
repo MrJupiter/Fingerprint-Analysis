@@ -24,7 +24,7 @@ public abstract class ImageConvertor {
 	 protected BufferedImage readImage() throws Exception {
 		 File file = new File(pathInputImage);
 		 String fileExtension = getFileExtension(file);
-		 if (fileExtension.equalsIgnoreCase(".jpeg") || fileExtension.equalsIgnoreCase(".png")) {
+		 if (fileExtension.equalsIgnoreCase(".jpeg") || fileExtension.equalsIgnoreCase(".jpg") || fileExtension.equalsIgnoreCase(".png")) {
 			 image = ImageIO.read(file);
 			 width = image.getWidth();
 		     height = image.getHeight();

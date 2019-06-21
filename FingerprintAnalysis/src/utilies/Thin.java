@@ -59,8 +59,6 @@ public class Thin {
         for(int h=0;h<height;h++)
             for(int w=0;w<width;w++)
                 raster.setSample(w, h, 0, pixelsArrayAfter[h][w]);
-        /*File file = new File("D:\\Users\\Malik\\Desktop\\pAfter.png");
-    	ImageIO.write(bufferedImageAfter, "png", file);*/
     	return bufferedImageAfter;
 	}
 

@@ -16,6 +16,7 @@ import panels.FingerprintAuthenticationPanel;
 import panels.ImageProcessingPanel;
 import panels.MinutiaeExtractionPanel;
 import utilies.StringNumeric;
+import utilies.Terminal;
 import utilies.Thin;
 
 import javax.imageio.ImageIO;
@@ -429,5 +430,7 @@ public class FingerprintsAnalysisUI {
                 }
             }
 		});
+	
+		Terminal.executeCommand("rm *xyt *txt *brw *dm *hcm *lcm *lfm *min *qm *png *jpeg *jpg *gif");
 	}
 }
