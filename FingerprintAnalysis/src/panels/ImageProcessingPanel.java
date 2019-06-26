@@ -9,9 +9,17 @@ package panels;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
+import java.io.File;
 
+import javax.imageio.ImageIO;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
@@ -20,10 +28,18 @@ import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingConstants;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.LineBorder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import beans.ImageBean;
+import imageProcessing.ImageConvertor;
+import imageProcessing.ImageProcessing;
+import utilies.Thin;
 
-public class ImageProcessingPanel extends JPanel{
+public class ImageProcessingPanel extends JPanel implements PanelsInterface{
+
+	private static final long serialVersionUID = 1L;
+
 	private JTextField pathTextField;
 	private ImageBean originalImagePanel;
 	private ImageBean convertedImagePanel;
@@ -36,9 +52,7 @@ public class ImageProcessingPanel extends JPanel{
 	private JButton thinButton;
 	private JLabel title;
 	
-	private static final long serialVersionUID = 1L;
-
-	public ImageProcessingPanel() {
+	public ImageProcessingPanel(){
 		setLayout(null);
 		JPanel panel_1 = new JPanel();
 		panel_1.setBorder(new LineBorder(new Color(0, 0, 0), 2));
@@ -54,8 +68,10 @@ public class ImageProcessingPanel extends JPanel{
 		title.setLocation(304, 12);
         add(title);
         
-		browseButton = new JButton("Browse...");
+		browseButton = new JButton("Browse");
 		browseButton.setBounds(886, 12, 97, 25);
+		browseButton.setBackground(new Color(141, 61, 150));
+		browseButton.setForeground(new Color(255, 255, 255));
 		panel_1.add(browseButton);
 		
 		JLabel lblNewLabel = new JLabel("The absolute path to the image:");
@@ -83,6 +99,8 @@ public class ImageProcessingPanel extends JPanel{
 		btnToGray = new JButton("To Grayscale");
 		btnToGray.setFont(new Font("Times New Roman", Font.BOLD, 13));
 		btnToGray.setBounds(427, 177, 135, 25);
+		btnToGray.setBackground(new Color(141, 61, 150));
+		btnToGray.setForeground(new Color(255, 255, 255));
 		panel_2.add(btnToGray);
 		
 		JLabel label_1 = new JLabel("Converted Image");
@@ -115,11 +133,15 @@ public class ImageProcessingPanel extends JPanel{
 		btnToBinary = new JButton("To Binary");
 		btnToBinary.setFont(new Font("Times New Roman", Font.BOLD, 13));
 		btnToBinary.setBounds(427, 246, 135, 25);
+		btnToBinary.setBackground(new Color(141, 61, 150));
+		btnToBinary.setForeground(new Color(255, 255, 255));
 		panel_2.add(btnToBinary);
 		
 		saveImageButton = new JButton("Save");
 		saveImageButton.setFont(new Font("Times New Roman", Font.BOLD, 13));
 		saveImageButton.setBounds(427, 457, 135, 25);
+		saveImageButton.setBackground(new Color(141, 61, 150));
+		saveImageButton.setForeground(new Color(255, 255, 255));
 		panel_2.add(saveImageButton);
 		
 		thresholdSpinner = new JSpinner();
@@ -134,62 +156,110 @@ public class ImageProcessingPanel extends JPanel{
 		thinButton = new JButton("Thin");
 		thinButton.setFont(new Font("Times New Roman", Font.BOLD, 13));
 		thinButton.setBounds(427, 304, 135, 25);
+		thinButton.setBackground(new Color(141, 61, 150));
+		thinButton.setForeground(new Color(255, 255, 255));
 		panel_2.add(thinButton);
 	}
-
-	public JTextField getPathTextField() {
-		return pathTextField;
-	}
-
-	public ImageBean getOriginalImagePanel() {
-		return originalImagePanel;
-	}
-
-	public ImageBean getConvertedImagePanel() {
-		return convertedImagePanel;
-	}
-
-	public BufferedImage getBufferedConvertedImage() {
-		return bufferedConvertedImage;
-	}
-
-	public JButton getBrowseButton() {
-		return browseButton;
-	}
-
-	public JButton getBtnToGray() {
-		return btnToGray;
-	}
-
-	public JButton getSaveImageButton() {
-		return saveImageButton;
-	}
-
-	public JSpinner getThresholdSpinner() {
-		return thresholdSpinner;
-	}
-
-	public JButton getBtnToBinary() {
-		return btnToBinary;
-	}
-
-	public JButton getThinButton() {
-		return thinButton;
+	
+	public void setListeners(JFrame frame) {
+		ImageConvertor imageConvertor = new ImageProcessing();;
+		
+        browseButton.addActionListener(new ActionListener() {
+			@Override
+            public void actionPerformed(ActionEvent e) {
+                JFileChooser repository = new JFileChooser();
+                try {
+                    repository.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+                    repository.showOpenDialog(frame);
+                    repository.setBounds(600, 400, 600, 420);
+                    pathTextField.setText(repository.getSelectedFile().getAbsolutePath());
+                	originalImagePanel.setCurrentImage(pathTextField.getText());
+                	imageConvertor.setPathInputImage(pathTextField.getText());
+                }catch (Exception ex){
+                    System.out.println("Error Message: " + ex.getMessage());
+                }
+            }
+		});
+		
+		pathTextField.addKeyListener(new KeyAdapter() {
+			@Override
+            public void keyPressed(KeyEvent e) {
+                super.keyPressed(e);
+                if(e.getKeyCode() == KeyEvent.VK_ENTER){
+                    try {
+                        originalImagePanel.setCurrentImage(pathTextField.getText());
+                    	imageConvertor.setPathInputImage(pathTextField.getText());
+                    }catch(Exception ex){
+                        System.out.println("Error Message: " + ex.getMessage());
+                    }
+                }
+            }
+		});
+		
+		btnToGray.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					bufferedConvertedImage = imageConvertor.convertToGrayscale();
+					convertedImagePanel.setCurrentImage(bufferedConvertedImage);
+				} catch (Exception e2) {
+					e2.printStackTrace();
+				}
+			}
+		});
+		
+		saveImageButton.addActionListener(new ActionListener() {
+			@Override
+            public void actionPerformed(ActionEvent e) {
+				if(bufferedConvertedImage != null) {
+	                JFileChooser repository = new JFileChooser();
+	                repository.setApproveButtonText("Save");
+	                try {
+	                    repository.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+	                    repository.showOpenDialog(frame);
+	                    repository.setBounds(600, 400, 600, 420);
+	                    File file = new File(repository.getSelectedFile().getAbsolutePath());
+	                    String fileName = file.getName();
+                    	ImageIO.write(bufferedConvertedImage, fileName.substring(fileName.lastIndexOf(".") + 1), file);
+	                }catch (Exception ex){
+	                    System.out.println("Error Message: " + ex.getMessage());
+	                }
+				}
+            }
+		});
+		
+		thresholdSpinner.addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent arg0) {
+				try {
+					bufferedConvertedImage = imageConvertor.convertToBinary(Integer.parseInt(thresholdSpinner.getValue().toString()));
+					convertedImagePanel.setCurrentImage(bufferedConvertedImage);
+				}catch(Exception ex) {
+					ex.printStackTrace();
+				}
+			}
+		});
+		
+		btnToBinary.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					bufferedConvertedImage = imageConvertor.convertToBinary(Integer.parseInt(thresholdSpinner.getValue().toString()));
+					convertedImagePanel.setCurrentImage(bufferedConvertedImage);
+				}catch(Exception ex) {
+					ex.printStackTrace();
+				}
+			}
+		});
+	    
+		thinButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				try {
+					Thin thin = new Thin(pathTextField.getText(), Integer.parseInt(thresholdSpinner.getValue().toString()));
+					bufferedConvertedImage = thin.thinImage();
+					convertedImagePanel.setCurrentImage(bufferedConvertedImage);
+				} catch (Exception e2) {
+					e2.printStackTrace();
+				}
+			}
+		});
 	}
 	
-	public void setPathTextFieldText(String text) {
-		pathTextField.setText(text);
-	}
-
-	public String getPathTextFieldText() {
-		return pathTextField.getText();
-	}
-
-	public void setBufferedConvertedImage(BufferedImage bufferedConvertedImage) {
-		this.bufferedConvertedImage = bufferedConvertedImage;
-	}
-	
-	public JLabel getTitle() {
-		return title;
-	}
 }

@@ -1,5 +1,12 @@
 package beans;
 
+/**
+ * 
+ * @author Abdelmalik GHOUBIR
+ * @date 17 June 2019
+ * 
+ */
+
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;

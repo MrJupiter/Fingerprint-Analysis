@@ -1,5 +1,12 @@
 package imageProcessing;
 
+/**
+ * 
+ * @author Abdelmalik GHOUBIR
+ * @date 17 June 2019
+ * 
+ */
+
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;

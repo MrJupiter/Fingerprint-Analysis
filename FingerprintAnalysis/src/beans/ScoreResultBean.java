@@ -1,5 +1,12 @@
 package beans;
 
+/**
+ * 
+ * @author Abdelmalik GHOUBIR
+ * @date 17 June 2019
+ * 
+ */
+
 import java.io.Serializable;
 import java.text.DecimalFormat;
 

@@ -1,9 +1,23 @@
 package panels;
 
+/**
+ * 
+ * @author Abdelmalik GHOUBIR
+ * @date 17 June 2019
+ * 
+ */
+
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 import javax.swing.JButton;
+import javax.swing.JColorChooser;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -13,10 +27,13 @@ import javax.swing.border.LineBorder;
 
 import beans.ImageBean;
 import beans.ScoreResultBean;
+import beans.TemplateTextBean;
+import utilies.StringNumeric;
 
-public class FingerprintAuthenticationPanel extends JPanel{
+public class FingerprintAuthenticationPanel extends JPanel implements PanelsInterface{
 
 	private static final long serialVersionUID = 1L;
+	
 	private JTextField pathTextField1;
 	private JTextField pathTextField2;
 	private ImageBean originalImagePanel1;
@@ -51,12 +68,16 @@ public class FingerprintAuthenticationPanel extends JPanel{
 		add(panel2);
 		panel2.setLayout(null);
 		
-		browseButton1 = new JButton("Browse...");
+		browseButton1 = new JButton("Browse");
 		browseButton1.setBounds(886, 12, 97, 25);
+		browseButton1.setBackground(new Color(141, 61, 150));
+		browseButton1.setForeground(new Color(255, 255, 255));
 		panel_1.add(browseButton1);
 		
-		browseButton2 = new JButton("Browse...");
+		browseButton2 = new JButton("Browse");
 		browseButton2.setBounds(886, 12, 97, 25);
+		browseButton2.setBackground(new Color(141, 61, 150));
+		browseButton2.setForeground(new Color(255, 255, 255));
 		panel2.add(browseButton2);
 
 		JLabel lblNewLabel = new JLabel("The first image:");
@@ -93,6 +114,8 @@ public class FingerprintAuthenticationPanel extends JPanel{
 		
 		jColorChooser = new JButton("Minutiae color");
 		jColorChooser.setBounds(427, 130, 135, 25);
+		jColorChooser.setBackground(new Color(141, 61, 150));
+		jColorChooser.setForeground(new Color(255, 255, 255));
 		panel_2.add(jColorChooser);
 		
 		JLabel lblThreshold = new JLabel("Threshold:");
@@ -107,6 +130,8 @@ public class FingerprintAuthenticationPanel extends JPanel{
 		authentificateButton = new JButton("Authenticate");
 		authentificateButton.setFont(new Font("Times New Roman", Font.BOLD, 13));
 		authentificateButton.setBounds(427, 227, 135, 25);
+		authentificateButton.setBackground(new Color(141, 61, 150));
+		authentificateButton.setForeground(new Color(255, 255, 255));
 		panel_2.add(authentificateButton);
 		
 		authorisationColorPanel = new JPanel();
@@ -145,56 +170,141 @@ public class FingerprintAuthenticationPanel extends JPanel{
 		panel_3.add(originalImagePanel2);
 	}
 	
-	public JButton getBrowseButton1() {
-		return browseButton1;
-	}
+	public void setListeners(JFrame frame) {
+		browseButton1.addActionListener(new ActionListener() {
+			@Override
+            public void actionPerformed(ActionEvent e) {
+                JFileChooser repository = new JFileChooser();
+                try {
+                    repository.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+                    repository.showOpenDialog(frame);
+                    repository.setBounds(600, 400, 600, 420);
+                    pathTextField1.setText(repository.getSelectedFile().getAbsolutePath());
+                    originalImagePanel1.setCurrentImage(pathTextField1.getText());
+                }catch (Exception ex){
+                    System.out.println("Error Message: " + ex.getMessage());
+                }
+            }
+		});
+		
+		pathTextField1.addKeyListener(new KeyAdapter() {
+			@Override
+            public void keyPressed(KeyEvent e) {
+                super.keyPressed(e);
+                if(e.getKeyCode() == KeyEvent.VK_ENTER){
+                    try {
+                        originalImagePanel1.setCurrentImage(pathTextField1.getText());
+                    }catch(Exception ex){
+                        System.out.println("Error Message: " + ex.getMessage());
+                    }
+                }
+            }
+		});
+		
+		browseButton2.addActionListener(new ActionListener() {
+			@Override
+            public void actionPerformed(ActionEvent e) {
+                JFileChooser repository = new JFileChooser();
+                try {
+                    repository.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+                    repository.showOpenDialog(frame);
+                    repository.setBounds(600, 400, 600, 420);
+                    pathTextField2.setText(repository.getSelectedFile().getAbsolutePath());
+                    originalImagePanel2.setCurrentImage(pathTextField2.getText());
+                }catch (Exception ex){
+                    System.out.println("Error Message: " + ex.getMessage());
+                }
+            }
+		});
+		
+		pathTextField2.addKeyListener(new KeyAdapter() {
+			@Override
+            public void keyPressed(KeyEvent e) {
+                super.keyPressed(e);
+                if(e.getKeyCode() == KeyEvent.VK_ENTER){
+                    try {
+                        originalImagePanel2.setCurrentImage(pathTextField2.getText());
+                    }catch(Exception ex){
+                        System.out.println("Error Message: " + ex.getMessage());
+                    }
+                }
+            }
+		});
 	
-	public JButton getBrowseButton2() {
-		return browseButton2;
+		authentificateButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String thresholdString = thresholdValueTextField.getText();
+				if(!thresholdString.equals("") && !pathTextField1.getText().equals("") && !pathTextField2.getText().equals("")) {
+					try {
+                		if(StringNumeric.isNumeric(thresholdString)) {
+                    		TemplateTextBean image2template = new TemplateTextBean();
+                    		image2template.convertToTemplate(pathTextField1.getText(), "rubbish1", originalImagePanel1);
+                    		image2template.convertToTemplate(pathTextField2.getText(), "rubbish2", originalImagePanel2);
+    						String score = scoreLabel.getScoreResult("./rubbish1.txt", "./rubbish2.txt");
+    						float threshold = Float.parseFloat(thresholdString);
+    						authorisationColorPanel.setBackground((Double.parseDouble(score)>threshold)?new Color(0,255,0):new Color(255,0,0));
+    						scoreLabel.setForeground((Double.parseDouble(score)>threshold)?new Color(0,0,0):new Color(255,255,255));
+    						TemplateTextBean.clearRubbish("rubbish1");
+    						TemplateTextBean.clearRubbish("rubbish2");
+                    	}
+					} catch (Exception e2) {
+						e2.printStackTrace();
+					}
+				}
+			}
+		});
+		
+		thresholdValueTextField.addKeyListener(new KeyAdapter() {
+			@Override
+            public void keyPressed(KeyEvent e) {
+                super.keyPressed(e);
+                if(e.getKeyCode() == KeyEvent.VK_ENTER){
+                	try {
+                		String thresholdString = thresholdValueTextField.getText();
+                		if(StringNumeric.isNumeric(thresholdString) && !thresholdString.equals("") && !pathTextField1.getText().equals("") && !pathTextField2.getText().equals("")) {
+                    		TemplateTextBean image2template = new TemplateTextBean();
+                    		image2template.convertToTemplate(pathTextField1.getText(), "rubbish1", originalImagePanel1);
+                    		image2template.convertToTemplate(pathTextField2.getText(), "rubbish2", originalImagePanel2);
+    						String score = scoreLabel.getScoreResult("./rubbish1.txt", "./rubbish2.txt");
+    						float threshold = Float.parseFloat(thresholdString);
+    						authorisationColorPanel.setBackground((Double.parseDouble(score)>threshold)?new Color(0,255,0):new Color(255,0,0));
+    						scoreLabel.setForeground((Double.parseDouble(score)>threshold)?new Color(0,0,0):new Color(255,255,255));
+    						TemplateTextBean.clearRubbish("rubbish1");
+    						TemplateTextBean.clearRubbish("rubbish2");
+                    	}
+                    }catch(Exception ex){
+                        System.out.println("Error Message: " + ex.getMessage());
+                    }
+                }
+            }
+		});
+		
+		jColorChooser.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String thresholdString = thresholdValueTextField.getText();
+        		if(StringNumeric.isNumeric(thresholdString) && !thresholdString.equals("") && !pathTextField1.getText().equals("") && !pathTextField2.getText().equals("")) {
+					Color initialcolor = Color.RED;    
+					Color color = JColorChooser.showDialog(new JPanel(),"Select a color",initialcolor);   
+					originalImagePanel1.setCircleColor(color);
+					originalImagePanel2.setCircleColor(color);
+					try {
+                    		TemplateTextBean image2template = new TemplateTextBean();
+                    		image2template.convertToTemplate(pathTextField1.getText(), "rubbish1", originalImagePanel1);
+                    		image2template.convertToTemplate(pathTextField2.getText(), "rubbish2", originalImagePanel2);
+    						String score = scoreLabel.getScoreResult("./rubbish1.txt", "./rubbish2.txt");
+    						float threshold = Float.parseFloat(thresholdString);
+    						authorisationColorPanel.setBackground((Double.parseDouble(score)>threshold)?new Color(0,255,0):new Color(255,0,0));
+    						scoreLabel.setForeground((Double.parseDouble(score)>threshold)?new Color(0,0,0):new Color(255,255,255));
+    						TemplateTextBean.clearRubbish("rubbish1");
+    						TemplateTextBean.clearRubbish("rubbish2");
+					} catch (Exception e2) {
+						e2.printStackTrace();
+					}
+				}
+			}
+		});
+		
 	}
 
-	public JTextField getPathTextField1() {
-		return pathTextField1;
-	}
-	
-	public JTextField getPathTextField2() {
-		return pathTextField2;
-	}
-	
-	public ImageBean getOriginalImagePanel1() {
-		return originalImagePanel1;
-	}
-	
-	public ImageBean getOriginalImagePanel2() {
-		return originalImagePanel2;
-	}
-	
-	public void setPathTextField1(String pathTextField1) {
-		this.pathTextField1.setText(pathTextField1);
-	}
-	
-	public void setPathTextField2(String pathTextField2) {
-		this.pathTextField2.setText(pathTextField2);
-	}
-	
-	public JButton getAuthentificateButton() {
-		return authentificateButton;
-	}
-	
-	public ScoreResultBean getScoreLabel() {
-		return scoreLabel;
-	}
-	
-	public JPanel getAuthorisationColorPanel() {
-		return authorisationColorPanel;
-	}
-	
-	public JTextField getThresholdValueTextField() {
-		return thresholdValueTextField;
-	}
-	
-	public JButton getjColorChooser() {
-		return jColorChooser;
-	}
 }
 

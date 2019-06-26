@@ -1,9 +1,24 @@
 package panels;
 
+/**
+ * 
+ * @author Abdelmalik GHOUBIR
+ * @date 17 June 2019
+ * 
+ */
+
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.io.FileWriter;
 
 import javax.swing.JButton;
+import javax.swing.JColorChooser;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -15,7 +30,7 @@ import javax.swing.border.LineBorder;
 import beans.ImageBean;
 import beans.TemplateTextBean;
 
-public class MinutiaeExtractionPanel extends JPanel{
+public class MinutiaeExtractionPanel extends JPanel implements PanelsInterface{
 	
 	private static final long serialVersionUID = 1L;
 
@@ -43,8 +58,10 @@ public class MinutiaeExtractionPanel extends JPanel{
 		title.setBounds(301, 13, 382, 34);
         add(title);
         
-		browseButton = new JButton("Browse...");
+		browseButton = new JButton("Browse");
 		browseButton.setBounds(886, 12, 97, 25);
+		browseButton.setBackground(new Color(141, 61, 150));
+		browseButton.setForeground(new Color(255, 255, 255));
 		panel_1.add(browseButton);
 		
 		JLabel lblNewLabel = new JLabel("The absolute path to the image:");
@@ -72,6 +89,8 @@ public class MinutiaeExtractionPanel extends JPanel{
 		convertToTemplateButton = new JButton("To Template");
 		convertToTemplateButton.setFont(new Font("Times New Roman", Font.BOLD, 13));
 		convertToTemplateButton.setBounds(427, 247, 135, 25);
+		convertToTemplateButton.setBackground(new Color(141, 61, 150));
+		convertToTemplateButton.setForeground(new Color(255, 255, 255));
 		panel_2.add(convertToTemplateButton);
 		
 		JLabel label_1 = new JLabel("Minutiae Template");
@@ -103,44 +122,97 @@ public class MinutiaeExtractionPanel extends JPanel{
 
 		jColorChooser = new JButton("Minutiae color");
 		jColorChooser.setBounds(427, 215, 135, 25);
+		jColorChooser.setBackground(new Color(141, 61, 150));
+		jColorChooser.setForeground(new Color(255, 255, 255));
 		panel_2.add(jColorChooser);
 		
 		saveMinutaeTemplateButton = new JButton("Save");
 		saveMinutaeTemplateButton.setFont(new Font("Times New Roman", Font.BOLD, 13));
 		saveMinutaeTemplateButton.setBounds(427, 457, 135, 25);
+		saveMinutaeTemplateButton.setBackground(new Color(141, 61, 150));
+		saveMinutaeTemplateButton.setForeground(new Color(255, 255, 255));
 		panel_2.add(saveMinutaeTemplateButton);	
 	}
-
-	public JTextField getPathTextField() {
-		return pathTextField;
-	}
-
-	public ImageBean getOriginalImagePanel() {
-		return originalImagePanel;
-	}
-
-	public TemplateTextBean getTemplateTextBean() {
-		return templateTextBean;
-	}
-
-	public JButton getBrowseButton() {
-		return browseButton;
-	}
 	
-	public JButton getConvertToTemplateButton() {
-		return convertToTemplateButton;
-	}
-	
-	public JButton getSaveMinutaeTemplateButton() {
-		return saveMinutaeTemplateButton;
+	public void setListeners(JFrame frame) {
+		browseButton.addActionListener(new ActionListener() {
+			@Override
+            public void actionPerformed(ActionEvent e) {
+                JFileChooser repository = new JFileChooser();
+                try {
+                    repository.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+                    repository.showOpenDialog(frame);
+                    repository.setBounds(600, 400, 600, 420);
+                    pathTextField.setText(repository.getSelectedFile().getAbsolutePath());
+                    originalImagePanel.setCurrentImage(pathTextField.getText());
+                }catch (Exception ex){
+                    System.out.println("Error Message: " + ex.getMessage());
+                }
+            }
+		});
+		
+		pathTextField.addKeyListener(new KeyAdapter() {
+			@Override
+            public void keyPressed(KeyEvent e) {
+                super.keyPressed(e);
+                if(e.getKeyCode() == KeyEvent.VK_ENTER){
+                    try {
+    					originalImagePanel.setCurrentImage(pathTextField.getText());
+                    }catch(Exception ex){
+                        System.out.println("Error Message: " + ex.getMessage());
+                    }
+                }
+            }
+		});
+		
+		convertToTemplateButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					if(originalImagePanel.getCurrentImage() != null)
+						templateTextBean.convertToTemplate(pathTextField.getText(), "rubbish", originalImagePanel);
+						TemplateTextBean.clearRubbish("rubbish");
+				} catch (Exception e2) {
+					e2.printStackTrace();
+				}
+			}
+		});
+		
+		saveMinutaeTemplateButton.addActionListener(new ActionListener() {
+			@Override
+            public void actionPerformed(ActionEvent e) {
+				if(!templateTextBean.getText().equals("")) {
+					JFileChooser repository = new JFileChooser();
+		            repository.setApproveButtonText("Save");
+		            try {
+		               repository.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+		               repository.showOpenDialog(frame);
+		               repository.setBounds(600, 400, 600, 420);
+		               FileWriter fw = new FileWriter(repository.getSelectedFile().getAbsolutePath());
+		               fw.write(templateTextBean.getText());
+		               fw.close();
+		            }catch (Exception ex){
+		                System.out.println("Error Message: " + ex.getMessage());
+		            }
+				}
+            }
+		});
+		
+		jColorChooser.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+        		if(!pathTextField.getText().equals("")) {
+					Color initialcolor=Color.RED;    
+					Color color=JColorChooser.showDialog(new JPanel(),"Select a color",initialcolor);   
+					originalImagePanel.setCircleColor(color);
+					try {
+                    		TemplateTextBean image2template = new TemplateTextBean();
+                    		image2template.convertToTemplate(pathTextField.getText(), "rubbish", originalImagePanel);
+    						TemplateTextBean.clearRubbish("rubbish");
+					} catch (Exception e2) {
+						e2.printStackTrace();
+					}
+				}
+			}
+		});
 	}
 
-	public JLabel getTitle() {
-		return title;
-	}
-	
-	public JButton getjColorChooser() {
-		return jColorChooser;
-	}
-	
 }
