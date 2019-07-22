@@ -49,7 +49,7 @@ public class HackathonPanel extends JPanel implements PanelsInterface{
 		add(panel_1);
 		panel_1.setLayout(null);
 		
-		title = new JLabel("Image Processing");
+		title = new JLabel("Hackathon");
 		title.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, 20));
 		title.setHorizontalAlignment(SwingConstants.CENTER);
 		title.setBounds(301, 13, 382, 34);
