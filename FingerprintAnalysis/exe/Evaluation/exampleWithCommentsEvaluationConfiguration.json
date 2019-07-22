@@ -1,0 +1,17 @@
+{
+  "DefaultScoreFormat": 1, /* DefaultScoreFormat: (1:Double, 2:Integer, 3:Binary) */
+  "DefaultScoreType": 1, /* DefaultScoreType: (1:Distance, 2:Similarity) */
+
+  "ScoresDistributionFigure": true, /* To create or not the scores distribution figure */
+  "ScoresDistributionBinNumber": 50, /* Bin Number of the scores distribution figure */
+  "ErrorRatesFigures": true, /* To create or not the error rates figures (Fmr and Fnmr curves figure, ROC curve figure) */
+  "RocCurveLogarithmicAxis": true, /* To use or not Logarithmic Axis for the ROC curve (if not Axis will be Linear) */
+
+  "FiguresWidth": 800, /* Width of all the figures */
+  "FiguresHeight": 600, /* Height of all the figures */
+  "FigureExportFormat": 2, /* FigureExportFormat: (1:Pdf, 2:Svg) */
+
+  "LogFmrAndFnmrValues": false, /* To log (save to file) or not Fmr and Fnmr values */
+
+  "Prompt": false /* To prompt or not when process is done */
+}

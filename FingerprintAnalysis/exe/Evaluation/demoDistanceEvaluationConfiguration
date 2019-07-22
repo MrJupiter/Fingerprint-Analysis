@@ -1,0 +1,13 @@
+{
+  "DefaultScoreFormat": 1,
+  "DefaultScoreType": 1,
+  "ScoresDistributionFigure": true,
+  "ScoresDistributionBinNumber": 50,
+  "ErrorRatesFigures": true,
+  "RocCurveLogarithmicAxis": true,
+  "FiguresWidth": 800,
+  "FiguresHeight": 600,
+  "FigureExportFormat": 1,
+  "LogFmrAndFnmrValues": false,
+  "Prompt": false
+}

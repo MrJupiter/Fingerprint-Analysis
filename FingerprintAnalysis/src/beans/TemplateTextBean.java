@@ -45,8 +45,8 @@ public class TemplateTextBean extends JTextArea implements Serializable {
 		Terminal.executeCommand(executableMindtctString + " -m1 " + pathImage + " " + resultFileNameWithoutExtension);
 		Terminal.executeCommand("rm *brw *dm *hcm *lcm *lfm *min *qm");		
 		FileConvertor.convertIt(pathImage, resultFileNameWithoutExtension);
-        if((new File(resultFileNameWithoutExtension + ".txt")).exists()) {
-			BufferedReader reader = new BufferedReader(new FileReader(resultFileNameWithoutExtension + ".txt"));		
+        if((new File("trash//" + resultFileNameWithoutExtension + ".txt")).exists()) {
+			BufferedReader reader = new BufferedReader(new FileReader("trash//" + resultFileNameWithoutExtension + ".txt"));		
 			String line = reader.readLine();
 			while (line != null) {
 				setText(getText()+line + "\n");
@@ -60,7 +60,7 @@ public class TemplateTextBean extends JTextArea implements Serializable {
 	}
 	
 	public static void clearRubbish(String resultFileNameWithoutExtension) {
-		Terminal.executeCommand("rm " + resultFileNameWithoutExtension + ".txt " + resultFileNameWithoutExtension + ".xyt " + resultFileNameWithoutExtension + ".png");
+		Terminal.executeCommand("rm trash\\" + resultFileNameWithoutExtension + ".txt " + resultFileNameWithoutExtension + ".xyt " + resultFileNameWithoutExtension + ".png");
 	}
 	
 	private void drawMinutaes(String resultFileNameWithoutExtension, ImageBean imageBean) throws Exception {

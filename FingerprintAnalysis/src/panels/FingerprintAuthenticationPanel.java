@@ -240,7 +240,7 @@ public class FingerprintAuthenticationPanel extends JPanel implements PanelsInte
                     		TemplateTextBean image2template = new TemplateTextBean();
                     		image2template.convertToTemplate(pathTextField1.getText(), "rubbish1", originalImagePanel1);
                     		image2template.convertToTemplate(pathTextField2.getText(), "rubbish2", originalImagePanel2);
-    						String score = scoreLabel.getScoreResult("./rubbish1.txt", "./rubbish2.txt");
+    						String score = scoreLabel.getScoreResult("./trash/rubbish1.txt", "./trash/rubbish2.txt");
     						float threshold = Float.parseFloat(thresholdString);
     						authorisationColorPanel.setBackground((Double.parseDouble(score)>threshold)?new Color(0,255,0):new Color(255,0,0));
     						scoreLabel.setForeground((Double.parseDouble(score)>threshold)?new Color(0,0,0):new Color(255,255,255));
@@ -265,7 +265,7 @@ public class FingerprintAuthenticationPanel extends JPanel implements PanelsInte
                     		TemplateTextBean image2template = new TemplateTextBean();
                     		image2template.convertToTemplate(pathTextField1.getText(), "rubbish1", originalImagePanel1);
                     		image2template.convertToTemplate(pathTextField2.getText(), "rubbish2", originalImagePanel2);
-    						String score = scoreLabel.getScoreResult("./rubbish1.txt", "./rubbish2.txt");
+    						String score = scoreLabel.getScoreResult("./trash/rubbish1.txt", "./trash/rubbish2.txt");
     						float threshold = Float.parseFloat(thresholdString);
     						authorisationColorPanel.setBackground((Double.parseDouble(score)>threshold)?new Color(0,255,0):new Color(255,0,0));
     						scoreLabel.setForeground((Double.parseDouble(score)>threshold)?new Color(0,0,0):new Color(255,255,255));
@@ -291,7 +291,7 @@ public class FingerprintAuthenticationPanel extends JPanel implements PanelsInte
                     		TemplateTextBean image2template = new TemplateTextBean();
                     		image2template.convertToTemplate(pathTextField1.getText(), "rubbish1", originalImagePanel1);
                     		image2template.convertToTemplate(pathTextField2.getText(), "rubbish2", originalImagePanel2);
-    						String score = scoreLabel.getScoreResult("./rubbish1.txt", "./rubbish2.txt");
+    						String score = scoreLabel.getScoreResult("./trash/rubbish1.txt", "./trash/rubbish2.txt");
     						float threshold = Float.parseFloat(thresholdString);
     						authorisationColorPanel.setBackground((Double.parseDouble(score)>threshold)?new Color(0,255,0):new Color(255,0,0));
     						scoreLabel.setForeground((Double.parseDouble(score)>threshold)?new Color(0,0,0):new Color(255,255,255));

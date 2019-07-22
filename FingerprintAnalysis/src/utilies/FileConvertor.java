@@ -16,7 +16,7 @@ public class FileConvertor {
 	
     public static void convertIt(String imagePath, String resultFileNameWithoutExtension) throws Exception {
         if((new File(resultFileNameWithoutExtension + ".xyt")).exists()) {
-	    	FileWriter fw = new FileWriter(resultFileNameWithoutExtension + ".txt");
+	    	FileWriter fw = new FileWriter("trash//" + resultFileNameWithoutExtension + ".txt");
 	
 	        // Getting the image dimensions: Height and Width
 	        BufferedImage image = ImageIO.read(new File(imagePath));
