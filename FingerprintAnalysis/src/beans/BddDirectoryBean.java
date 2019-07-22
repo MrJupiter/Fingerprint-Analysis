@@ -70,7 +70,7 @@ public class BddDirectoryBean extends JPanel implements Serializable {
         }
 	}
 	
-	private void executeMCCSDK() {
+	private void executeMCCSDK() throws Exception{
 		String executableMccMatcher = "./exe\\MCCSdkV2.0\\SourceCode\\C#\\bin\\Debug\\MccMatcher.exe";
 		String MccPaperMatchParameters = "./exe\\MCCSdkV2.0\\Executables\\MccPaperMatchParameters.xml";
 		File[] listOfFiles = new File("trash").listFiles();
@@ -80,7 +80,7 @@ public class BddDirectoryBean extends JPanel implements Serializable {
                 	for (File file2: listOfFiles) {
                     	if (file2.isFile()) {
                             if (file2.getName().endsWith(".txt")) {
-                            	System.out.println(file1.getAbsolutePath() + " " + file2.getAbsolutePath());
+                            	System.out.println("Comparison score between .\\trash\\" + getFileNameWithoutExtension(file1) + ".txt and " + getFileNameWithoutExtension(file2) + ".txt");
                         		Terminal.executeCommand(executableMccMatcher + " " + file1.getAbsolutePath() + " " + file2.getAbsolutePath() + " " +  MccPaperMatchParameters + " trash/scoreTemp.txt");
                             }
                         }
