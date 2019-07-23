@@ -43,20 +43,23 @@ public class BddDirectoryBean extends JPanel implements Serializable {
 		executeMindtctSDK();
 		executeMCCSDK();
 		adaptIt();
+		
+		Terminal.executeCommand("./resources/exe/Evaluation/Eva.Biometrics.Console.Greyc.Evaluation.exe trash//MCCScoreTempBis.txt MccRocCuve.txt EvaluationConfiguration.json");
+		if ((new File("MccRocCuve_Roc.pdf")).exists()) 
+			mccRocCurve = ExtractImageFromPdf.PDF2BufferedImage("MccRocCuve_Roc.pdf");
+
 		UserAlgorithm userAlgorithm = new UserAlgorithm();
-		userAlgorithm.generateFile("userAlgoRocCurve.txt", "trash//userALgoScores.txt");
+		userAlgorithm.generateFile("trash//userALgoScores.txt");
 
-		Terminal.executeCommand("./exe/Evaluation/Eva.Biometrics.Console.Greyc.Evaluation.exe trash//scoreTempBis.txt MccRocCuve.txt EvaluationConfiguration.json");
-		if ((new File("MccRocCuve_Roc.pdf")).exists()) mccRocCurve = ExtractImageFromPdf.PDF2BufferedImage("MccRocCuve_Roc.pdf");
+		Terminal.executeCommand("./resources/exe/Evaluation/Eva.Biometrics.Console.Greyc.Evaluation.exe trash//userALgoScores.txt userAlgoRocCurve.txt EvaluationConfiguration.json");
+		if ((new File("userAlgoRocCurve_Roc.pdf")).exists()) 
+			userAlgorithmRocCurve = ExtractImageFromPdf.PDF2BufferedImage("userAlgoRocCurve_Roc.pdf");
 
-		Terminal.executeCommand("./exe/Evaluation/Eva.Biometrics.Console.Greyc.Evaluation.exe trash//userALgoScores.txt userAlgoRocCurve.txt EvaluationConfiguration.json");
-		if ((new File("userAlgoRocCurve_Roc.pdf")).exists()) userAlgorithmRocCurve = ExtractImageFromPdf.PDF2BufferedImage("userAlgoRocCurve_Roc.pdf");
-
-		Terminal.executeCommand("rm *.pdf *txt");
+		Terminal.executeCommand("rm *.pdf *txt  trash//*");
 	}
 
 	private void executeMindtctSDK() throws Exception {
-		String executableMindtctString = "./exe\\mindtct.exe";
+		String executableMindtctString = "./resources/exe\\mindtct.exe";
 		File[] listOfFiles = new File(_directoryAbsolutePathString).listFiles();
 		for (File file: listOfFiles) {
 			if (file.isFile()) {
@@ -70,18 +73,17 @@ public class BddDirectoryBean extends JPanel implements Serializable {
 						ImageIO.write(convertedImage, "png", fileBis);
 					}
 					Terminal.executeCommand(executableMindtctString + " -m1 " + fileBis.getAbsolutePath() + " " + getFileNameWithoutExtension(fileBis));
-					Terminal.executeCommand("rm *brw *dm *hcm *lcm *lfm *min *qm");
 					System.out.println("Generating .\\trash\\" + getFileNameWithoutExtension(fileBis) + ".txt");
 					FileConvertor.convertIt(fileBis.getAbsolutePath(), getFileNameWithoutExtension(fileBis));
-					Terminal.executeCommand("rm *xyt *png");
+					Terminal.executeCommand("rm *brw *dm *hcm *lcm *lfm *min *qm *xyt *png");
 				}
 			}
 		}
 	}
 
 	private void executeMCCSDK() throws Exception {
-		String executableMccMatcher = "./exe\\MCCSdkV2.0\\SourceCode\\C#\\bin\\Debug\\MccMatcher.exe";
-		String MccPaperMatchParameters = "./exe\\MCCSdkV2.0\\Executables\\MccPaperMatchParameters.xml";
+		String executableMccMatcher = "./resources/exe\\MCCSdkV2.0\\SourceCode\\C#\\bin\\Debug\\MccMatcher.exe";
+		String MccPaperMatchParameters = "./resources/exe\\MCCSdkV2.0\\Executables\\MccPaperMatchParameters.xml";
 		File[] listOfFiles = new File("trash").listFiles();
 		for (File file1: listOfFiles) {
 			if (file1.isFile()) {
@@ -90,7 +92,7 @@ public class BddDirectoryBean extends JPanel implements Serializable {
 						if (file2.isFile()) {
 							if (file2.getName().endsWith(".txt")) {
 								System.out.println("Comparison score between .\\trash\\" + getFileNameWithoutExtension(file1) + ".txt and " + getFileNameWithoutExtension(file2) + ".txt");
-								Terminal.executeCommand(executableMccMatcher + " " + file1.getAbsolutePath() + " " + file2.getAbsolutePath() + " " + MccPaperMatchParameters + " trash/scoreTemp.txt");
+								Terminal.executeCommand(executableMccMatcher + " " + file1.getAbsolutePath() + " " + file2.getAbsolutePath() + " " + MccPaperMatchParameters + " trash/MCCScoreTemp.txt");
 							}
 						}
 					}
@@ -106,8 +108,8 @@ public class BddDirectoryBean extends JPanel implements Serializable {
 	}
 
 	private void adaptIt() throws Exception {
-		FileWriter fw = new FileWriter("trash//scoreTempBis.txt");
-		Scanner scanner = new Scanner(new File("trash//scoreTemp.txt"));
+		FileWriter fw = new FileWriter("trash//MCCScoreTempBis.txt");
+		Scanner scanner = new Scanner(new File("trash//MCCScoreTemp.txt"));
 		String regex = "(\\s)+";
 		String[] header = scanner.nextLine().split(regex);
 

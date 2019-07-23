@@ -13,6 +13,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.io.File;
 import java.io.FileWriter;
 
 import javax.swing.JButton;
@@ -40,7 +41,6 @@ public class MinutiaeExtractionPanel extends JPanel implements PanelsInterface {
 	private JButton browseButton;
 	private JButton convertToTemplateButton;
 	private JButton saveMinutaeTemplateButton;
-	private JLabel title;
 	private JButton jColorChooser;
 
 	public MinutiaeExtractionPanel() {
@@ -52,7 +52,7 @@ public class MinutiaeExtractionPanel extends JPanel implements PanelsInterface {
 		add(panel_1);
 		panel_1.setLayout(null);
 
-		title = new JLabel("Minutiae Detector");
+		JLabel title = new JLabel("Minutiae Detector");
 		title.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, 18));
 		title.setHorizontalAlignment(SwingConstants.CENTER);
 		title.setBounds(301, 13, 382, 34);
@@ -135,7 +135,9 @@ public class MinutiaeExtractionPanel extends JPanel implements PanelsInterface {
 	}
 
 	public void setListeners(JFrame frame) {
-		browseButton.addActionListener(new ActionListener() {@Override
+		
+		browseButton.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				JFileChooser repository = new JFileChooser();
 				try {
@@ -150,7 +152,8 @@ public class MinutiaeExtractionPanel extends JPanel implements PanelsInterface {
 			}
 		});
 
-		pathTextField.addKeyListener(new KeyAdapter() {@Override
+		pathTextField.addKeyListener(new KeyAdapter() {
+			@Override
 			public void keyPressed(KeyEvent e) {
 				super.keyPressed(e);
 				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
@@ -164,9 +167,18 @@ public class MinutiaeExtractionPanel extends JPanel implements PanelsInterface {
 		});
 
 		convertToTemplateButton.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				try {
-					if (originalImagePanel.getCurrentImage() != null) templateTextBean.convertToTemplate(pathTextField.getText(), "rubbish", originalImagePanel);
+					File trashDir = new File("trash");
+					if (!trashDir.exists()) {
+						try {
+							trashDir.mkdir();
+						}
+						catch(SecurityException se) {}
+					}
+					if (originalImagePanel.getCurrentImage() != null) 
+						templateTextBean.convertToTemplate(pathTextField.getText(), "rubbish", originalImagePanel);
 					TemplateTextBean.clearRubbish("rubbish");
 				} catch(Exception e2) {
 					e2.printStackTrace();
@@ -174,7 +186,8 @@ public class MinutiaeExtractionPanel extends JPanel implements PanelsInterface {
 			}
 		});
 
-		saveMinutaeTemplateButton.addActionListener(new ActionListener() {@Override
+		saveMinutaeTemplateButton.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (!templateTextBean.getText().equals("")) {
 					JFileChooser repository = new JFileChooser();
@@ -194,6 +207,7 @@ public class MinutiaeExtractionPanel extends JPanel implements PanelsInterface {
 		});
 
 		jColorChooser.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (!pathTextField.getText().equals("")) {
 					Color initialcolor = Color.RED;
@@ -209,6 +223,7 @@ public class MinutiaeExtractionPanel extends JPanel implements PanelsInterface {
 				}
 			}
 		});
+		
 	}
 
 }

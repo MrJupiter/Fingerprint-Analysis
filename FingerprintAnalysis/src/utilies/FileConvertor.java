@@ -35,7 +35,7 @@ public class FileConvertor {
 			Scanner scanner = new Scanner(new File(resultFileNameWithoutExtension + ".xyt"));
 			String regex = "(\\s)+";
 			String[] header = scanner.nextLine().split(regex);
-
+ 
 			fw.write(header[0] + " " + header[1] + " " + (Integer.parseInt(header[2]) * Math.PI / 180) + "\n");
 			while (scanner.hasNext()) {
 				String[] row = scanner.nextLine().split(regex);

@@ -21,7 +21,6 @@ import panels.FingerprintAuthenticationPanel;
 import panels.HackathonPanel;
 import panels.ImageProcessingPanel;
 import panels.MinutiaeExtractionPanel;
-import utilies.Terminal;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -71,7 +70,9 @@ public class FingerprintsAnalysisUI {
 		frame.setBounds(100, 100, 1051, 726);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(new GridLayout(1, 0, 0, 0));
-
+		
+		frame.setIconImage(Toolkit.getDefaultToolkit().getImage("./resources/appIcon.jpg"));
+		
 		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
 		frame.setLocation(dim.width / 2 - frame.getSize().width / 2, dim.height / 2 - frame.getSize().height / 2);
 
@@ -122,7 +123,8 @@ public class FingerprintsAnalysisUI {
 			catch(SecurityException se) {}
 		}
 		// Menu items Listeners:
-		imageProcessingMenuItem.addActionListener(new ActionListener() {@Override
+		imageProcessingMenuItem.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				cardLayout.show(centralPanel, "imageProcessingPanel");
 				frame.setTitle("Image Processing");
@@ -143,7 +145,8 @@ public class FingerprintsAnalysisUI {
 			}
 		});
 
-		fingerprintAuthentificationMenuItem.addActionListener(new ActionListener() {@Override
+		fingerprintAuthentificationMenuItem.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				cardLayout.show(centralPanel, "fingerprintAuthenticationPanel");
 				frame.setTitle("Fingerprint Authentication");
@@ -164,7 +167,8 @@ public class FingerprintsAnalysisUI {
 			}
 		});
 
-		minutiaeExtractionMenuItem.addActionListener(new ActionListener() {@Override
+		minutiaeExtractionMenuItem.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				cardLayout.show(centralPanel, "minutaeExtractionPanel");
 				frame.setTitle("Minutiae Extraction");
@@ -185,7 +189,8 @@ public class FingerprintsAnalysisUI {
 			}
 		});
 
-		hackathonMenuItem.addActionListener(new ActionListener() {@Override
+		hackathonMenuItem.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				cardLayout.show(centralPanel, "hackathonPanel");
 				frame.setTitle("Hackathon");
@@ -214,8 +219,6 @@ public class FingerprintsAnalysisUI {
 		fingerprintAuthenticationPanel.setListeners(frame);
 		// HackathonPanel Listeners
 		hackathonPanel.setListeners(frame);
-
-		Terminal.executeCommand("rm *xyt *txt *brw *dm *hcm *lcm *lfm *min *qm *png *jpeg *jpg *gif *pdf");
 	}
 
 }

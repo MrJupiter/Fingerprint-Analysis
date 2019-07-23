@@ -23,8 +23,8 @@ public class ScoreResultBean extends JLabel implements Serializable {
 	}
 
 	public String getScoreResult(String firstTemplate, String secondTemplate) {
-		String executableMccMatcher = "./exe\\MCCSdkV2.0\\SourceCode\\C#\\bin\\Debug\\MccMatcher.exe";
-		String MccPaperMatchParameters = "./exe\\MCCSdkV2.0\\Executables\\MccPaperMatchParameters.xml";
+		String executableMccMatcher = "./resources/exe\\MCCSdkV2.0\\SourceCode\\C#\\bin\\Debug\\MccMatcher.exe";
+		String MccPaperMatchParameters = "./resources/exe\\MCCSdkV2.0\\Executables\\MccPaperMatchParameters.xml";
 		Terminal.executeCommand(executableMccMatcher + " " + firstTemplate + " " + secondTemplate + " " + MccPaperMatchParameters + " scoreTemp.txt");
 		String score = Terminal.executeCommand("awk '{printf $NF}' scoreTemp.txt");
 		DecimalFormat df = new DecimalFormat("#.####");

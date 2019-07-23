@@ -13,6 +13,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.io.File;
 
 import javax.swing.JButton;
 import javax.swing.JColorChooser;
@@ -171,7 +172,8 @@ public class FingerprintAuthenticationPanel extends JPanel implements PanelsInte
 	}
 
 	public void setListeners(JFrame frame) {
-		browseButton1.addActionListener(new ActionListener() {@Override
+		browseButton1.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				JFileChooser repository = new JFileChooser();
 				try {
@@ -186,7 +188,8 @@ public class FingerprintAuthenticationPanel extends JPanel implements PanelsInte
 			}
 		});
 
-		pathTextField1.addKeyListener(new KeyAdapter() {@Override
+		pathTextField1.addKeyListener(new KeyAdapter() {
+			@Override
 			public void keyPressed(KeyEvent e) {
 				super.keyPressed(e);
 				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
@@ -199,7 +202,8 @@ public class FingerprintAuthenticationPanel extends JPanel implements PanelsInte
 			}
 		});
 
-		browseButton2.addActionListener(new ActionListener() {@Override
+		browseButton2.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				JFileChooser repository = new JFileChooser();
 				try {
@@ -214,7 +218,8 @@ public class FingerprintAuthenticationPanel extends JPanel implements PanelsInte
 			}
 		});
 
-		pathTextField2.addKeyListener(new KeyAdapter() {@Override
+		pathTextField2.addKeyListener(new KeyAdapter() {
+			@Override
 			public void keyPressed(KeyEvent e) {
 				super.keyPressed(e);
 				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
@@ -228,10 +233,18 @@ public class FingerprintAuthenticationPanel extends JPanel implements PanelsInte
 		});
 
 		authentificateButton.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				String thresholdString = thresholdValueTextField.getText();
 				if (!thresholdString.equals("") && !pathTextField1.getText().equals("") && !pathTextField2.getText().equals("")) {
 					try {
+						File trashDir = new File("trash");
+						if (!trashDir.exists()) {
+							try {
+								trashDir.mkdir();
+							}
+							catch(SecurityException se) {}
+						}
 						if (StringNumeric.isNumeric(thresholdString)) {
 							TemplateTextBean image2template = new TemplateTextBean();
 							image2template.convertToTemplate(pathTextField1.getText(), "rubbish1", originalImagePanel1);
@@ -250,11 +263,19 @@ public class FingerprintAuthenticationPanel extends JPanel implements PanelsInte
 			}
 		});
 
-		thresholdValueTextField.addKeyListener(new KeyAdapter() {@Override
+		thresholdValueTextField.addKeyListener(new KeyAdapter() {
+			@Override
 			public void keyPressed(KeyEvent e) {
 				super.keyPressed(e);
 				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
 					try {
+						File trashDir = new File("trash");
+						if (!trashDir.exists()) {
+							try {
+								trashDir.mkdir();
+							}
+							catch(SecurityException se) {}
+						}
 						String thresholdString = thresholdValueTextField.getText();
 						if (StringNumeric.isNumeric(thresholdString) && !thresholdString.equals("") && !pathTextField1.getText().equals("") && !pathTextField2.getText().equals("")) {
 							TemplateTextBean image2template = new TemplateTextBean();
@@ -275,6 +296,7 @@ public class FingerprintAuthenticationPanel extends JPanel implements PanelsInte
 		});
 
 		jColorChooser.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				String thresholdString = thresholdValueTextField.getText();
 				if (StringNumeric.isNumeric(thresholdString) && !thresholdString.equals("") && !pathTextField1.getText().equals("") && !pathTextField2.getText().equals("")) {

@@ -74,7 +74,7 @@ public class ZhangSuenAlgorithm {
                     count++;
             }
         return count;
-    }
+    } 
  
     private boolean atLeastOneIsWhite(int row, int column, int step) {
         int count = 0;

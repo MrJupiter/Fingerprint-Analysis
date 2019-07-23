@@ -25,7 +25,6 @@ import javax.swing.border.LineBorder;
 
 import beans.BddDirectoryBean;
 import beans.ImageBean;
-import utilies.Terminal;
 
 public class HackathonPanel extends JPanel implements PanelsInterface {
 
@@ -129,6 +128,108 @@ public class HackathonPanel extends JPanel implements PanelsInterface {
 
 	}
 
+	public void setListeners(JFrame frame) {
+		browseButton.addActionListener(new ActionListener() {@Override
+			public void actionPerformed(ActionEvent e) {
+				JFileChooser repository = new JFileChooser();
+				try {
+					repository.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+					repository.showOpenDialog(frame);
+					repository.setBounds(600, 400, 600, 420);
+					pathTextField.setText(repository.getSelectedFile().getAbsolutePath());
+					bddDirectoryBean.setDirectoryAbsolutePathString(repository.getSelectedFile().getAbsolutePath());
+				} catch(Exception ex) {
+					System.out.println("Error Message: " + ex.getMessage());
+				}
+			}
+		});
+
+		pathTextField.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				super.keyPressed(e);
+				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+					try {
+						bddDirectoryBean.setDirectoryAbsolutePathString(pathTextField.getText());
+					} catch(Exception ex) {
+						System.out.println("Error Message: " + ex.getMessage());
+					}
+				}
+			}
+		});
+
+		saveImageButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if ((BufferedImage) mccCurveRocCurveImage.getCurrentImage() != null || (BufferedImage) userAlgorithRocCurveImage.getCurrentImage() != null) {
+					JFileChooser repository = new JFileChooser();
+					repository.setApproveButtonText("Save");
+					try {
+						repository.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+						repository.showOpenDialog(frame);
+						repository.setBounds(600, 400, 600, 420);
+						File file = new File(repository.getSelectedFile().getAbsolutePath());
+						String fileName = file.getName();
+						
+						boolean mccBoolean = (BufferedImage) mccCurveRocCurveImage.getCurrentImage() != null;
+						boolean userAlgoBoolean = (BufferedImage) userAlgorithRocCurveImage.getCurrentImage() != null;
+						
+						BufferedImage mccCurveRocCurveBufferedImage = (mccBoolean==true)?drawTextOnImage("MCC ROC CURVE", (BufferedImage) mccCurveRocCurveImage.getCurrentImage(), 10):null;
+						BufferedImage userAlgorithRocCurveBufferedImage = (userAlgoBoolean==true)?drawTextOnImage("User Algorithm ROC CURVE", (BufferedImage) userAlgorithRocCurveImage.getCurrentImage(), 10):null;
+
+						int mccCurveRocCurveImageWidth = (mccCurveRocCurveBufferedImage != null) ? mccCurveRocCurveBufferedImage.getWidth() : 0;
+						int userAlgoCurveRocCurveImageWidth = (userAlgorithRocCurveBufferedImage != null) ? userAlgorithRocCurveBufferedImage.getWidth() : 0;
+
+						int mccCurveRocCurveImageHeight = (mccCurveRocCurveBufferedImage != null) ? mccCurveRocCurveBufferedImage.getHeight() : 0;
+						int userAlgoCurveRocCurveImageHeight = (userAlgorithRocCurveBufferedImage != null) ? userAlgorithRocCurveBufferedImage.getHeight() : 0;
+
+						int width = (mccCurveRocCurveImageWidth > userAlgoCurveRocCurveImageWidth) ? mccCurveRocCurveImageWidth: userAlgoCurveRocCurveImageWidth;
+						int height = mccCurveRocCurveImageHeight + userAlgoCurveRocCurveImageHeight;
+
+						BufferedImage newImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+						Graphics2D g2 = newImage.createGraphics();
+						Color oldColor = g2.getColor();
+						g2.setPaint(Color.WHITE);
+						g2.fillRect(0, 0, width, height);
+						g2.setColor(oldColor);
+
+						if (mccCurveRocCurveBufferedImage != null) 
+							g2.drawImage(mccCurveRocCurveBufferedImage, null, 0, 0);
+
+						if (userAlgorithRocCurveBufferedImage != null) 
+							g2.drawImage(userAlgorithRocCurveBufferedImage, null, 0, mccCurveRocCurveImageHeight);
+
+						g2.dispose();
+						ImageIO.write(newImage, fileName.substring(fileName.lastIndexOf(".") + 1), file);
+					} catch(Exception ex) {
+						System.out.println("Error Message: " + ex.getMessage());
+					}
+				}
+			}
+		});
+
+		startButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					if (!pathTextField.getText().equals("")) {
+						File trashDir = new File("trash");
+						if (!trashDir.exists()) {
+							try {
+								trashDir.mkdir();
+							}
+							catch(SecurityException se) {}
+						}
+						bddDirectoryBean.startTheHackathon();
+						mccCurveRocCurveImage.setCurrentImage(bddDirectoryBean.getMccRocCurve());
+						userAlgorithRocCurveImage.setCurrentImage(bddDirectoryBean.getUserAlgorithmRocCurve());
+					}
+				} catch(Exception ex) {
+					ex.printStackTrace();
+				}
+			}
+		});
+	}
+
 	private BufferedImage drawTextOnImage(String text, BufferedImage image, int space) {
 		BufferedImage bi = new BufferedImage(image.getWidth(), image.getHeight() + space, BufferedImage.TRANSLUCENT);
 		Graphics2D g2d = (Graphics2D) bi.createGraphics();
@@ -147,95 +248,6 @@ public class HackathonPanel extends JPanel implements PanelsInterface {
 
 		g2d.dispose();
 		return bi;
-	}
-
-	public void setListeners(JFrame frame) {
-		browseButton.addActionListener(new ActionListener() {@Override
-			public void actionPerformed(ActionEvent e) {
-				JFileChooser repository = new JFileChooser();
-				try {
-					repository.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-					repository.showOpenDialog(frame);
-					repository.setBounds(600, 400, 600, 420);
-					pathTextField.setText(repository.getSelectedFile().getAbsolutePath());
-					bddDirectoryBean.setDirectoryAbsolutePathString(repository.getSelectedFile().getAbsolutePath());
-				} catch(Exception ex) {
-					System.out.println("Error Message: " + ex.getMessage());
-				}
-			}
-		});
-
-		pathTextField.addKeyListener(new KeyAdapter() {@Override
-			public void keyPressed(KeyEvent e) {
-				super.keyPressed(e);
-				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-					try {
-						bddDirectoryBean.setDirectoryAbsolutePathString(pathTextField.getText());
-					} catch(Exception ex) {
-						System.out.println("Error Message: " + ex.getMessage());
-					}
-				}
-			}
-		});
-
-		saveImageButton.addActionListener(new ActionListener() {@Override
-			public void actionPerformed(ActionEvent e) {
-				if ((BufferedImage) mccCurveRocCurveImage.getCurrentImage() != null || (BufferedImage) userAlgorithRocCurveImage.getCurrentImage() != null) {
-					JFileChooser repository = new JFileChooser();
-					repository.setApproveButtonText("Save");
-					try {
-						repository.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
-						repository.showOpenDialog(frame);
-						repository.setBounds(600, 400, 600, 420);
-						File file = new File(repository.getSelectedFile().getAbsolutePath());
-						String fileName = file.getName();
-
-						BufferedImage mccCurveRocCurveBufferedImage = drawTextOnImage("MCC ROC CURVE", (BufferedImage) mccCurveRocCurveImage.getCurrentImage(), 10);
-						BufferedImage userAlgorithRocCurveBufferedImage = drawTextOnImage("User Algorithm ROC CURVE", (BufferedImage) userAlgorithRocCurveImage.getCurrentImage(), 10);
-
-						int mccCurveRocCurveImageWidth = (mccCurveRocCurveBufferedImage != null) ? mccCurveRocCurveBufferedImage.getWidth() : 0;
-						int userAlgoCurveRocCurveImageWidth = (userAlgorithRocCurveBufferedImage != null) ? userAlgorithRocCurveBufferedImage.getWidth() : 0;
-
-						int mccCurveRocCurveImageHeight = (mccCurveRocCurveBufferedImage != null) ? mccCurveRocCurveBufferedImage.getHeight() : 0;
-						int userAlgoCurveRocCurveImageHeight = (userAlgorithRocCurveBufferedImage != null) ? userAlgorithRocCurveBufferedImage.getHeight() : 0;
-
-						int width = (mccCurveRocCurveImageWidth > userAlgoCurveRocCurveImageWidth) ? mccCurveRocCurveImageWidth: userAlgoCurveRocCurveImageWidth;
-						int height = mccCurveRocCurveImageHeight + userAlgoCurveRocCurveImageHeight;
-
-						BufferedImage newImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-						Graphics2D g2 = newImage.createGraphics();
-						Color oldColor = g2.getColor();
-						g2.setPaint(Color.WHITE);
-						g2.fillRect(0, 0, width, height);
-						g2.setColor(oldColor);
-
-						if (mccCurveRocCurveBufferedImage != null) g2.drawImage(mccCurveRocCurveBufferedImage, null, 0, 0);
-
-						if (userAlgorithRocCurveBufferedImage != null) g2.drawImage(userAlgorithRocCurveBufferedImage, null, 0, mccCurveRocCurveImageHeight);
-
-						g2.dispose();
-						ImageIO.write(newImage, fileName.substring(fileName.lastIndexOf(".") + 1), file);
-					} catch(Exception ex) {
-						System.out.println("Error Message: " + ex.getMessage());
-					}
-				}
-			}
-		});
-
-		startButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				try {
-					if (!pathTextField.getText().equals("")) {
-						bddDirectoryBean.startTheHackathon();
-						mccCurveRocCurveImage.setCurrentImage(bddDirectoryBean.getMccRocCurve());
-						userAlgorithRocCurveImage.setCurrentImage(bddDirectoryBean.getUserAlgorithmRocCurve());
-						Terminal.executeCommand("rm trash//*");
-					}
-				} catch(Exception ex) {
-					ex.printStackTrace();
-				}
-			}
-		});
 	}
 
 }
