@@ -16,9 +16,9 @@ public class UserAlgorithm {
 
 	public void generateFile(String scoresFile) {
 		/* THE USER MUST GENERATE A FILE "rocCurveFile" WHICH RESPECTS THE NORMS OF THE ROC CURVE PAINTER PROGRAM 
-		 * name the scoresFile as "trash//userALgoScores.txt"
+		 * the scoresFile is the file where scores must be stored
 		 * the scoresFile must follow the form bellow: 
-		 * fileName1 fileName2 Intra/Inter score\n
+		 * fingerprint1_fileName fingerprint2_fileName Intra/Inter score\n
 		 * */
 	}
 }

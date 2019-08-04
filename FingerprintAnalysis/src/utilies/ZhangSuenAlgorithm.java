@@ -35,11 +35,22 @@ public class ZhangSuenAlgorithm {
                     if (grid[r][c] != '0')
                         continue;
  
-                    int nn = blackNeighborPixelsNumber(r, c);
-                    if (nn < 2 || nn > 6)
+                    int counter = 0;
+                    
+                    for (int i = 0; i < nbrs.length - 1; i++)
+                        if (grid[r + nbrs[i][1]][c + nbrs[i][0]] == '0')
+                        	counter++;
+                    
+                    if (counter < 2 || counter > 6)
                         continue;
- 
-                    if (whiteToBlackTransitionsNumber(r, c) != 1)
+                    
+                    int whiteToBlackTransitionsNumber = 0;
+                    
+                    for (int i = 0; i < nbrs.length - 1; i++)
+                        if (grid[r + nbrs[i][1]][c + nbrs[i][0]] == '1' && grid[r + nbrs[i + 1][1]][c + nbrs[i + 1][0]] == '0')
+                            	whiteToBlackTransitionsNumber++;
+                    
+                    if (whiteToBlackTransitionsNumber != 1)
                         continue;
  
                     if (!atLeastOneIsWhite(r, c, firstStep ? 0 : 1))
@@ -57,24 +68,6 @@ public class ZhangSuenAlgorithm {
         } while (firstStep || hasChanged);
         return grid;
     }
- 
-    private int blackNeighborPixelsNumber(int row, int column) {
-        int counter = 0;
-        for (int i = 0; i < nbrs.length - 1; i++)
-            if (grid[row + nbrs[i][1]][column + nbrs[i][0]] == '0')
-            	counter++;
-        return counter;
-    }
- 
-    private int whiteToBlackTransitionsNumber(int row, int column) {
-        int count = 0;
-        for (int i = 0; i < nbrs.length - 1; i++)
-            if (grid[row + nbrs[i][1]][column + nbrs[i][0]] == '1') {
-                if (grid[row + nbrs[i + 1][1]][column + nbrs[i + 1][0]] == '0')
-                    count++;
-            }
-        return count;
-    } 
  
     private boolean atLeastOneIsWhite(int row, int column, int step) {
         int count = 0;

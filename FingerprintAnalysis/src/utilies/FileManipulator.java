@@ -12,7 +12,7 @@ import java.awt.image.BufferedImage;
 import java.io. * ;
 import javax.imageio.ImageIO;
 
-public class FileConvertor {
+public class FileManipulator {
 
 	public static void convertIt(String imagePath, String resultFileNameWithoutExtension) throws Exception {
 		if ((new File(resultFileNameWithoutExtension + ".xyt")).exists()) {
@@ -45,5 +45,11 @@ public class FileConvertor {
 			fw.close();
 
 		}
+	}
+	
+	public static String getFileNameWithoutExtension(File file) throws Exception {
+		String fileName = "";
+		if (file != null && file.exists()) fileName = file.getName().replaceFirst("[.][^.]+$", "");
+		return fileName;
 	}
 }

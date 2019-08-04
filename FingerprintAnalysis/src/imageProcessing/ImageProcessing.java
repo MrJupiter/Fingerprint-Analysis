@@ -8,12 +8,8 @@ package imageProcessing;
  */
 
 import java.awt.image.BufferedImage;
-import java.awt.image.Raster;
 import java.awt.image.WritableRaster;
-import java.io.BufferedInputStream;
-import java.io.File;
 
-import javax.imageio.ImageIO;
 
 public class ImageProcessing extends ImageConvertor {
 

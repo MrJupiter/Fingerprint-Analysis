@@ -116,12 +116,12 @@ public class FingerprintsAnalysisUI {
 		menuBar.add(hackathonMenuItem);
 		// Listeners:
 		File trashDir = new File("trash");
-		if (!trashDir.exists()) {
-			try {
+		
+		if (!trashDir.exists())
+			try {	
 				trashDir.mkdir();
-			}
-			catch(SecurityException se) {}
-		}
+			}catch(SecurityException se) {}
+		
 		// Menu items Listeners:
 		imageProcessingMenuItem.addActionListener(new ActionListener() {
 			@Override

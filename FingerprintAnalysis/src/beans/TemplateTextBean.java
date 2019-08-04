@@ -12,7 +12,6 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.Serializable;
-import java.rmi.server.RMIClassLoader;
 import java.util.Scanner;
 
 import javax.imageio.ImageIO;
@@ -21,7 +20,7 @@ import javax.swing.JTextArea;
 
 import imageProcessing.ImageConvertor;
 import imageProcessing.ImageProcessing;
-import utilies.FileConvertor;
+import utilies.FileManipulator;
 import utilies.Terminal;
 
 public class TemplateTextBean extends JTextArea implements Serializable {
@@ -39,21 +38,24 @@ public class TemplateTextBean extends JTextArea implements Serializable {
 
 		File file = new File(pathImage);
 		File fileBis = file;
+		System.out.println(ImageIO.read(file).getColorModel().getPixelSize());
+
+		if (ImageIO.read(file).getColorModel().getPixelSize() == 1)
+	        JOptionPane.showMessageDialog(null, "Do not use binary images!", "Error", JOptionPane.INFORMATION_MESSAGE);
+		
 		if (ImageIO.read(file).getColorModel().getPixelSize() != 8) {
 			ImageConvertor imageConvertor = new ImageProcessing();
 			imageConvertor.setPathInputImage(file.getAbsolutePath());
 			BufferedImage convertedImage = imageConvertor.convertToGrayscale();
-			fileBis = new File("trash\\" + getFileNameWithoutExtension(file) + ".png");
+			fileBis = new File("trash\\" + FileManipulator.getFileNameWithoutExtension(file) + ".png");
 			ImageIO.write(convertedImage, "png", fileBis);
 		}
 
-		if(ImageIO.read(file).getColorModel().getPixelSize() == 1)
-	        JOptionPane.showMessageDialog(null, "Do not use binary images!", "Error", JOptionPane.INFORMATION_MESSAGE);
-		else {
+		if (ImageIO.read(fileBis).getColorModel().getPixelSize() == 8) {
 			String executableMindtctString = "./resources/exe\\mindtct.exe";
 			Terminal.executeCommand(executableMindtctString + " -m1 " + fileBis.getAbsolutePath() + " " + resultFileNameWithoutExtension);
 			Terminal.executeCommand("rm *brw *dm *hcm *lcm *lfm *min *qm");
-			FileConvertor.convertIt(fileBis.getAbsolutePath(), resultFileNameWithoutExtension);
+			FileManipulator.convertIt(fileBis.getAbsolutePath(), resultFileNameWithoutExtension);
 			if ((new File("trash//" + resultFileNameWithoutExtension + ".txt")).exists()) {
 				BufferedReader reader = new BufferedReader(new FileReader("trash//" + resultFileNameWithoutExtension + ".txt"));
 				String line = reader.readLine();
@@ -89,12 +91,6 @@ public class TemplateTextBean extends JTextArea implements Serializable {
 			}
 			scanner.close();
 		}
-	}
-	
-	private String getFileNameWithoutExtension(File file) throws Exception {
-		String fileName = "";
-		if (file != null && file.exists()) fileName = file.getName().replaceFirst("[.][^.]+$", "");
-		return fileName;
 	}
 
 }

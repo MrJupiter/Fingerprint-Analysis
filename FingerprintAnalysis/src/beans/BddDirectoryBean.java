@@ -13,15 +13,15 @@ import imageProcessing.ImageConvertor;
 import imageProcessing.ImageProcessing;
 import userAlgorithm.UserAlgorithm;
 import utilies.ExtractImageFromPdf;
-import utilies.FileConvertor;
+import utilies.FileManipulator;
 import utilies.Terminal;
 
 public class BddDirectoryBean extends JPanel implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	private String _directoryAbsolutePathString;
-	BufferedImage mccRocCurve;
-	BufferedImage userAlgorithmRocCurve;
+	private BufferedImage mccRocCurve;
+	private BufferedImage userAlgorithmRocCurve;
 
 	public BddDirectoryBean() {
 		super();
@@ -44,14 +44,17 @@ public class BddDirectoryBean extends JPanel implements Serializable {
 		executeMCCSDK();
 		adaptIt();
 		
-		Terminal.executeCommand("./resources/exe/Evaluation/Eva.Biometrics.Console.Greyc.Evaluation.exe trash//MCCScoreTempBis.txt MccRocCuve.txt EvaluationConfiguration.json");
+		String rocCurveEvaluationExecutable = "./resources/exe/Evaluation/Eva.Biometrics.Console.Greyc.Evaluation.exe";
+		String rocCurveEvaluationJSONConfig = "./resources/EvaluationConfiguration.json";
+		
+		Terminal.executeCommand(rocCurveEvaluationExecutable + " trash//MCCScoreTempBis.txt MccRocCuve.txt " + rocCurveEvaluationJSONConfig);
 		if ((new File("MccRocCuve_Roc.pdf")).exists()) 
 			mccRocCurve = ExtractImageFromPdf.PDF2BufferedImage("MccRocCuve_Roc.pdf");
 
 		UserAlgorithm userAlgorithm = new UserAlgorithm();
 		userAlgorithm.generateFile("trash//userALgoScores.txt");
 
-		Terminal.executeCommand("./resources/exe/Evaluation/Eva.Biometrics.Console.Greyc.Evaluation.exe trash//userALgoScores.txt userAlgoRocCurve.txt EvaluationConfiguration.json");
+		Terminal.executeCommand(rocCurveEvaluationExecutable + " trash//userALgoScores.txt userAlgoRocCurve.txt " + rocCurveEvaluationJSONConfig);
 		if ((new File("userAlgoRocCurve_Roc.pdf")).exists()) 
 			userAlgorithmRocCurve = ExtractImageFromPdf.PDF2BufferedImage("userAlgoRocCurve_Roc.pdf");
 
@@ -69,12 +72,12 @@ public class BddDirectoryBean extends JPanel implements Serializable {
 						ImageConvertor imageConvertor = new ImageProcessing();
 						imageConvertor.setPathInputImage(file.getAbsolutePath());
 						BufferedImage convertedImage = imageConvertor.convertToGrayscale();
-						fileBis = new File("trash\\" + getFileNameWithoutExtension(file) + ".png");
+						fileBis = new File("trash\\" + FileManipulator.getFileNameWithoutExtension(file) + ".png");
 						ImageIO.write(convertedImage, "png", fileBis);
 					}
-					Terminal.executeCommand(executableMindtctString + " -m1 " + fileBis.getAbsolutePath() + " " + getFileNameWithoutExtension(fileBis));
-					System.out.println("Generating .\\trash\\" + getFileNameWithoutExtension(fileBis) + ".txt");
-					FileConvertor.convertIt(fileBis.getAbsolutePath(), getFileNameWithoutExtension(fileBis));
+					Terminal.executeCommand(executableMindtctString + " -m1 " + fileBis.getAbsolutePath() + " " + FileManipulator.getFileNameWithoutExtension(fileBis));
+					System.out.println("Generating .\\trash\\" + FileManipulator.getFileNameWithoutExtension(fileBis) + ".txt");
+					FileManipulator.convertIt(fileBis.getAbsolutePath(), FileManipulator.getFileNameWithoutExtension(fileBis));
 					Terminal.executeCommand("rm *brw *dm *hcm *lcm *lfm *min *qm *xyt *png");
 				}
 			}
@@ -86,25 +89,15 @@ public class BddDirectoryBean extends JPanel implements Serializable {
 		String MccPaperMatchParameters = "./resources/exe\\MCCSdkV2.0\\Executables\\MccPaperMatchParameters.xml";
 		File[] listOfFiles = new File("trash").listFiles();
 		for (File file1: listOfFiles) {
-			if (file1.isFile()) {
-				if (file1.getName().endsWith(".txt")) {
+			if (file1.isFile() && file1.getName().endsWith(".txt")) {
 					for (File file2: listOfFiles) {
-						if (file2.isFile()) {
-							if (file2.getName().endsWith(".txt")) {
-								System.out.println("Comparison score between .\\trash\\" + getFileNameWithoutExtension(file1) + ".txt and " + getFileNameWithoutExtension(file2) + ".txt");
+						if (file2.isFile() && file2.getName().endsWith(".txt")) {
+								System.out.println("Comparison score between .\\trash\\" + FileManipulator.getFileNameWithoutExtension(file1) + ".txt and " + FileManipulator.getFileNameWithoutExtension(file2) + ".txt");
 								Terminal.executeCommand(executableMccMatcher + " " + file1.getAbsolutePath() + " " + file2.getAbsolutePath() + " " + MccPaperMatchParameters + " trash/MCCScoreTemp.txt");
-							}
 						}
 					}
-				}
 			}
 		}
-	}
-
-	private String getFileNameWithoutExtension(File file) throws Exception {
-		String fileName = "";
-		if (file != null && file.exists()) fileName = file.getName().replaceFirst("[.][^.]+$", "");
-		return fileName;
 	}
 
 	private void adaptIt() throws Exception {
@@ -113,17 +106,17 @@ public class BddDirectoryBean extends JPanel implements Serializable {
 		String regex = "(\\s)+";
 		String[] header = scanner.nextLine().split(regex);
 
-		fw.write(getFileNameWithoutExtension(new File(header[0])) + ".txt " + getFileNameWithoutExtension(new File(header[1])) + ".txt ");
-		String[] idenAndAcq1 = getFileNameWithoutExtension(new File(header[0])).split("_");
-		String[] idenAndAcq2 = getFileNameWithoutExtension(new File(header[1])).split("_");
+		fw.write(FileManipulator.getFileNameWithoutExtension(new File(header[0])) + ".txt " + FileManipulator.getFileNameWithoutExtension(new File(header[1])) + ".txt ");
+		String[] idenAndAcq1 = FileManipulator.getFileNameWithoutExtension(new File(header[0])).split("_");
+		String[] idenAndAcq2 = FileManipulator.getFileNameWithoutExtension(new File(header[1])).split("_");
 		fw.write(idenAndAcq1[0].equals(idenAndAcq2[0]) ? "Intra": "Inter");
 		fw.write(" " + header[3] + "\n");
 
 		while (scanner.hasNext()) {
 			String[] row = scanner.nextLine().split(regex);
-			fw.write(getFileNameWithoutExtension(new File(row[0])) + ".txt " + getFileNameWithoutExtension(new File(row[1])) + ".txt ");
-			String[] idenAndAcq3 = getFileNameWithoutExtension(new File(row[0])).split("_");
-			String[] idenAndAcq4 = getFileNameWithoutExtension(new File(row[1])).split("_");
+			fw.write(FileManipulator.getFileNameWithoutExtension(new File(row[0])) + ".txt " + FileManipulator.getFileNameWithoutExtension(new File(row[1])) + ".txt ");
+			String[] idenAndAcq3 = FileManipulator.getFileNameWithoutExtension(new File(row[0])).split("_");
+			String[] idenAndAcq4 = FileManipulator.getFileNameWithoutExtension(new File(row[1])).split("_");
 			fw.write(idenAndAcq3[0].equals(idenAndAcq4[0]) ? "Intra": "Inter");
 			fw.write(" " + row[3] + "\n");
 		}

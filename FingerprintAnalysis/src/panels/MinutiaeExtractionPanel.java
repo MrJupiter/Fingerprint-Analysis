@@ -171,15 +171,13 @@ public class MinutiaeExtractionPanel extends JPanel implements PanelsInterface {
 			public void actionPerformed(ActionEvent e) {
 				try {
 					File trashDir = new File("trash");
-					if (!trashDir.exists()) {
-						try {
+					try {
+						if (!trashDir.exists())
 							trashDir.mkdir();
-						}
-						catch(SecurityException se) {}
-					}
+					}catch(SecurityException se) {}
 					if (originalImagePanel.getCurrentImage() != null) 
 						templateTextBean.convertToTemplate(pathTextField.getText(), "rubbish", originalImagePanel);
-					TemplateTextBean.clearRubbish("rubbish");
+						TemplateTextBean.clearRubbish("rubbish");
 				} catch(Exception e2) {
 					e2.printStackTrace();
 				}

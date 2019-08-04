@@ -36,7 +36,8 @@ public class ImageBean extends JPanel implements Serializable {
 	public void setCurrentImage(String imageAbsolutePathString) throws Exception {
 		_imageAbsolutePathString = imageAbsolutePathString;
 		File file = new File(_imageAbsolutePathString);
-		if (file.isFile() && (file.getName().endsWith(".jpg") || file.getName().endsWith(".png") || file.getName().endsWith(".gif") || file.getName().endsWith(".jpeg"))) _currentImage = Toolkit.getDefaultToolkit().createImage(file.getAbsolutePath());
+		if (file.isFile() && (file.getName().endsWith(".jpg") || file.getName().endsWith(".png") || file.getName().endsWith(".jpeg"))) 
+			_currentImage = Toolkit.getDefaultToolkit().createImage(file.getAbsolutePath());
 		repaint();
 	}
 
